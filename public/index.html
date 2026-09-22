@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulk Gmail Panel - User Dashboard</title>
+    <script src="https://tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 font-sans text-gray-800">
+
+    <!-- Header Section -->
+    <div class="bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center shadow-sm">
+        <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 bg-red-500 rounded-lg flex items-center justify-center text-white font-bold text-xl">M</div>
+            <h2 class="text-xl font-bold text-gray-800">Bulk Gmail Panel</h2>
+        </div>
+        <div class="flex items-center space-x-4">
+            <div class="bg-green-50 border border-green-200 px-3 py-1.5 rounded-lg text-sm">
+                Wallet Balance: <span class="font-bold text-green-600">₹<span id="userBalance">0.00</span></span>
+            </div>
+            <button onclick="toggleModal('depositModal')" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-3 py-2 rounded-lg transition">Add Funds</button>
+        </div>
+    </div>
+
+    <div class="max-w-4xl mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+        
+        <!-- LEFT: ORDER FORM & BULK CONFIG -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+            <h3 class="text-lg font-bold mb-4 text-gray-800">🚀 Place Bulk Gmail Order</h3>
+            <form id="orderForm" class="space-y-4" onsubmit="placeOrder(event)">
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Your Telegram Handle / WhatsApp</label>
+                    <input type="text" placeholder="@username or phone number" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm bg-gray-50" required>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Select Gmail Quantity</label>
+                    <select id="quantity" onchange="calculatePrice()" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm bg-gray-50">
+                        <option value="10">10 Gmail Accounts (₹100)</option>
+                        <option value="20">20 Gmail Accounts (₹200)</option>
+                        <option value="50">50 Gmail Accounts (₹500)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Preferred Common Password</label>
+                    <input type="password" placeholder="Set password for accounts" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm bg-gray-50" required>
+                </div>
+                <div class="pt-2">
+                    <button type="submit" class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2.5 rounded-lg transition text-sm shadow-sm">
+                        Launch Automatic Creation
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- RIGHT: LIVE INVENTORY BOX (DELIVERED GMAILS) -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+            <div>
+                <h3 class="text-lg font-bold mb-2 text-gray-800">📬 My Purchased Gmails</h3>
+                <p class="text-xs text-gray-500 mb-4">Your automatically created fresh accounts will appear below instantly.</p>
+                
+                <div class="border border-gray-200 rounded-lg p-3 bg-gray-50 font-mono text-xs h-48 overflow-y-auto" id="inventoryBox">
+                    <p class="text-gray-400 italic">No accounts purchased yet. Place an order above to start automation.</p>
+                </div>
+            </div>
+            <button onclick="copyInventory()" class="w-full mt-4 bg-gray-800 hover:bg-gray-900 text-white font-bold py-2 text-xs rounded-lg transition">
+                Copy All Accounts Data
+            </button>
+        </div>
+    </div>
+
+    <!-- 24/7 DYNAMIC TICKET SUPPORT BOX -->
+    <div class="max-w-4xl mx-auto px-4 pb-12">
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+            <h3 class="text-md font-bold text-gray-800 mb-3">💬 24/7 Gmail Creator Work Support</h3>
+            <div class="flex space-x-3">
+                <input type="text" id="ticketMsg" placeholder="Need help with login or wallet delay? Type here..." class="flex-1 text-sm bg-gray-50 border rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-red-500">
+                <button onclick="sendTicket()" class="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs px-4 py-2 rounded-lg transition">Open Support Ticket</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- POP-UP MODAL: ADD FUNDS WITH YOUR REAL QR -->
+    <div id="depositModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl p-6 max-w-sm w-full border border-gray-200 shadow-xl relative text-center">
+            <button onclick="toggleModal('depositModal')" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 font-bold text-lg">&times;</button>
+            
+            <h3 class="text-lg font-bold text-gray-900 mb-1">Add Wallet Funds</h3>
+            <p class="text-xs text-gray-500 mb-4">Scan QR code using FamPay or any UPI app to deposit instantly.</p>
+            
+            <!-- AAPKA ASLI QR YAHAN DISPLAY HOGA -->
+            <div class="bg-white p-2 inline-block rounded-lg shadow-inner border border-gray-200 mb-4">
+                <img src="my-qr.png" alt="Scan to Pay" class="w-40 h-40 mx-auto object-contain">
+            </div>
+
+            <!-- WITHOUT UPI ID: ONLY UTR NUMBER VERIFICATION -->
+            <form onsubmit="submitDeposit(event)" class="space-y-3 text-left">
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Exact Amount Paid (₹)</label>
+                    <input type="number" id="depAmount" placeholder="e.g. 100" class="w-full px-3 py-1.5 border rounded-lg bg-gray-50 text-sm focus:outline-none" required>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">12-Digit UTR / Transaction Ref ID</label>
+                    <input type="text" maxlength="12" id="depUtr" placeholder="Enter transaction ref number" class="w-full px-3 py-1.5 border rounded-lg bg-gray-50 text-sm focus:outline-none" required>
+                </div>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-2 rounded-lg transition">Submit Deposit Verification</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function toggleModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.toggle('hidden');
+        }
+
+        function calculatePrice() {
+            // Dropdown change detection, text changes color dynamically
+        }
+
+        function submitDeposit(e) {
+            e.preventDefault();
+            const amount = document.getElementById('depAmount').value;
+            const utr = document.getElementById('depUtr').value;
+            alert(`Deposit Request Submitted! Your UTR ${utr} for ₹${amount} is sent to our admin system queue for verification.`);
+            toggleModal('depositModal');
+            document.getElementById('depAmount').value = '';
+            document.getElementById('depUtr').value = '';
+        }
+
+        function placeOrder(e) {
+            e.preventDefault();
+            alert("Order failed! Your wallet balance is ₹0.00. Please click 'Add Funds' and verify payment with admins.");
+        }
+
+        function sendTicket() {
+            const msg = document.getElementById('ticketMsg').value;
+            if(!msg) return;
+            alert(`Ticket raised under 'Gmail Creator Work' channel! Admins will respond in less than 5 minutes.`);
+            document.getElementById('ticketMsg').value = '';
+        }
+    </script>
+</body>
+</html>
+

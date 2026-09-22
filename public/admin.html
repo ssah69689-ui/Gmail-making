@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gmail Creator Work - Admin Panel</title>
+    <script src="https://tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-white font-sans">
+
+    <!-- Top Navigation Bar -->
+    <div class="bg-slate-800 border-b border-slate-700 px-6 py-4 flex justify-between items-center shadow-md">
+        <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center text-white font-bold">G</div>
+            <h1 class="text-xl font-bold tracking-wide text-red-500">Gmail Creator Work <span class="text-xs bg-slate-700 text-gray-300 px-2 py-0.5 rounded ml-2">Admin Core</span></h1>
+        </div>
+        <div class="text-sm text-gray-400">Welcome, <span class="text-white font-semibold">Shubham (Owner)</span></div>
+    </div>
+
+    <div class="max-w-6xl mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <!-- COLUMN 1: OWNER NOTIFICATIONS & ADD ADMIN -->
+        <div class="space-y-6">
+            <!-- Live Information Logs for Owner -->
+            <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-lg">
+                <h3 class="text-sm font-bold tracking-wider text-gray-400 uppercase mb-4 flex items-center">
+                    <span class="w-2 h-2 bg-green-500 rounded-full inline-block mr-2 animate-pulse"></span> Owner Activity Notifications
+                </h3>
+                <div id="notificationBox" class="space-y-3 max-h-60 overflow-y-auto text-xs">
+                    <p class="text-gray-500 italic">System active. Awaiting admin actions...</p>
+                </div>
+            </div>
+
+            <!-- Add Admin Feature -->
+            <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-lg">
+                <h3 class="text-sm font-bold tracking-wider text-gray-400 uppercase mb-3">👑 Add System Admin</h3>
+                <div class="space-y-3">
+                    <input type="text" id="newAdminName" placeholder="Enter friend's admin name" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-red-500">
+                    <button onclick="addAdmin()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 text-sm rounded-lg transition">Authorize Admin</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- COLUMN 2 & 3: USER BALANCES (ADD / DEBIT) -->
+        <div class="md:col-span-2 space-y-6">
+            <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-lg">
+                <h3 class="text-lg font-bold mb-4 text-gray-200">User Wallet Management</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-gray-400">
+                        <thead class="bg-slate-700 text-gray-200 uppercase text-xs">
+                            <tr>
+                                <th class="px-4 py-3">Username</th>
+                                <th class="px-4 py-3">Telegram</th>
+                                <th class="px-4 py-3">Current Balance</th>
+                                <th class="px-4 py-3 text-center">Modify Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userTableBody">
+                            <!-- JS will load users here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Front-end Action Controls script -->
+    <script>
+        async function loadUsers() {
+            const res = await fetch('/api/users');
+            const users = await res.json();
+            const tbody = document.getElementById('userTableBody');
+            tbody.innerHTML = users.map(user => `
+                <tr class="border-b border-slate-700 bg-slate-800 hover:bg-slate-750">
+                    <td class="px-4 py-4 font-semibold text-white">${user.username}</td>
+                    <td class="px-4 py-4 text-blue-400">${user.telegram}</td>
+                    <td class="px-4 py-4 font-bold text-green-400">₹${user.balance.toFixed(2)}</td>
+                    <td class="px-4 py-4 flex space-x-2 justify-center">
+                        <input type="number" id="amt-${user.id}" placeholder="Amount" class="w-20 bg-slate-950 border border-slate-700 rounded text-center text-xs text-white focus:outline-none">
+                        <button onclick="updateBalance(${user.id}, 'credit')" class="bg-green-600 hover:bg-green-700 text-white text-xs px-2 py-1 rounded font-bold">Add</button>
+                        <button onclick="updateBalance(${user.id}, 'debit')" class="bg-amber-600 hover:bg-amber-700 text-white text-xs px-2 py-1 rounded font-bold">Debit</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        async function updateBalance(userId, action) {
+            const amount = document.getElementById(`amt-${userId}`).value;
+            if(!amount || amount <= 0) return alert("Please enter a valid amount");
+
+            await fetch('/api/admin/update-balance', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId, amount, action, adminName: "Sub-Admin-Alex" })
+            });
+            loadUsers();
+            loadNotifications();
+        }
+
+        async function addAdmin() {
+            const username = document.getElementById('newAdminName').value;
+            if(!username) return alert("Enter admin username");
+            const res = await fetch('/api/admin/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username })
+            });
+            const data = await res.json();
+            alert(data.message);
+            document.getElementById('newAdminName').value = '';
+            loadNotifications();
+        }
+
+        async function loadNotifications() {
+            const res = await fetch('/api/owner/notifications');
+            const logs = await res.json();
+            const box = document.getElementById('notificationBox');
+            if(logs.length === 0) return;
+            box.innerHTML = logs.map(log => `
+                <div class="p-2 bg-slate-900 rounded border-l-2 border-red-500">
+                    <span class="text-[10px] text-gray-500 block">${log.time}</span>
+                    <span class="text-gray-200">${log.details}</span>
+                </div>
+            `).join('');
+        }
+
+        // Initial Load
+        loadUsers();
+        loadNotifications();
+        setInterval(loadNotifications, 5000); // Har 5 second mein notification auto refresh hogi
+    </script>
+</body>
+</html>
+

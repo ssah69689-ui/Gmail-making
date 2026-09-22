@@ -3,133 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gmail Creator Work - Admin Panel</title>
-    <script src="https://tailwindcss.com"></script>
+    <title>Master Grid Control - Secure Admin</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background: #030712; color: #f9fafb; min-height: 100vh; padding: 30px; }
+        .lock-container { max-width: 360px; margin: 100px auto; background: #111827; border: 1px solid #ef4444; border-radius: 12px; padding: 30px; text-align: center; box-shadow: 0 0 30px rgba(239,68,68,0.2); }
+        .dashboard-layout { display: none; max-width: 1200px; margin: 0 auto; grid-template-columns: 1fr 2fr; gap: 30px; }
+        .box { background: #111827; border: 1px solid #1f2937; border-radius: 10px; padding: 20px; }
+        .input-field { width:100%; background:#1f2937; border:1px solid #374151; padding:10px; color:white; border-radius:6px; margin-bottom:12px; outline:none; }
+        .btn { width:100%; background:#ef4444; color:white; font-weight:bold; border:none; padding:10px; border-radius:6px; cursor:pointer; }
+    </style>
 </head>
-<body class="bg-slate-900 text-white font-sans">
+<body>
 
-    <!-- Top Navigation Bar -->
-    <div class="bg-slate-800 border-b border-slate-700 px-6 py-4 flex justify-between items-center shadow-md">
-        <div class="flex items-center space-x-3">
-            <div class="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center text-white font-bold">G</div>
-            <h1 class="text-xl font-bold tracking-wide text-red-500">Gmail Creator Work <span class="text-xs bg-slate-700 text-gray-300 px-2 py-0.5 rounded ml-2">Admin Core</span></h1>
-        </div>
-        <div class="text-sm text-gray-400">Welcome, <span class="text-white font-semibold">Shubham (Owner)</span></div>
+    <!-- SECURE INTERCEPT GATEWAY LOGIN -->
+    <div id="lockGate" class="lock-container">
+        <h3 style="color:#ef4444; margin-bottom:5px;">🔒 Cyber Gate Shield</h3>
+        <p style="font-size:12px; color:#9ca3af; margin-bottom:20px;">Unauthorized Entry is Strictly Logged</p>
+        <input type="text" id="admUser" placeholder="Enter Master Username" class="input-field">
+        <input type="password" id="admPass" placeholder="Enter Security Code" class="input-field">
+        <button class="btn" onclick="verifyGate()">Verify Identity</button>
     </div>
 
-    <div class="max-w-6xl mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-3 gap-8">
-        
-        <!-- COLUMN 1: OWNER NOTIFICATIONS & ADD ADMIN -->
-        <div class="space-y-6">
-            <!-- Live Information Logs for Owner -->
-            <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-lg">
-                <h3 class="text-sm font-bold tracking-wider text-gray-400 uppercase mb-4 flex items-center">
-                    <span class="w-2 h-2 bg-green-500 rounded-full inline-block mr-2 animate-pulse"></span> Owner Activity Notifications
-                </h3>
-                <div id="notificationBox" class="space-y-3 max-h-60 overflow-y-auto text-xs">
-                    <p class="text-gray-500 italic">System active. Awaiting admin actions...</p>
-                </div>
+    <!-- MAIN CORE SECURE GRID INTERFACE -->
+    <div id="adminGrid" class="dashboard-layout">
+        <div style="display:flex; flex-direction:column; gap:20px;">
+            <div class="box">
+                <h4 style="color:#9ca3af; font-size:12px; text-transform:uppercase; margin-bottom:12px;">👑 Register System Sub-Admin</h4>
+                <input type="text" id="newSubName" placeholder="Admin Nickname" class="input-field">
+                <input type="password" id="newSubPass" placeholder="Secret Key Token" class="input-field">
+                <button class="btn" style="background:#2563eb;" onclick="addSubAdmin()">Authorize Access Node</button>
             </div>
-
-            <!-- Add Admin Feature -->
-            <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-lg">
-                <h3 class="text-sm font-bold tracking-wider text-gray-400 uppercase mb-3">👑 Add System Admin</h3>
-                <div class="space-y-3">
-                    <input type="text" id="newAdminName" placeholder="Enter friend's admin name" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-red-500">
-                    <button onclick="addAdmin()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 text-sm rounded-lg transition">Authorize Admin</button>
-                </div>
+            <div class="box">
+                <h4 style="color:#9ca3af; font-size:12px; text-transform:uppercase; margin-bottom:12px;">📡 Main Owner System Audit Notifications</h4>
+                <div id="notifyBox" style="font-size:11px; color:#9ca3af; line-height:1.6;">Awaiting secure loop stream setup...</div>
             </div>
         </div>
 
-        <!-- COLUMN 2 & 3: USER BALANCES (ADD / DEBIT) -->
-        <div class="md:col-span-2 space-y-6">
-            <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-lg">
-                <h3 class="text-lg font-bold mb-4 text-gray-200">User Wallet Management</h3>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-sm text-gray-400">
-                        <thead class="bg-slate-700 text-gray-200 uppercase text-xs">
-                            <tr>
-                                <th class="px-4 py-3">Username</th>
-                                <th class="px-4 py-3">Telegram</th>
-                                <th class="px-4 py-3">Current Balance</th>
-                                <th class="px-4 py-3 text-center">Modify Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="userTableBody">
-                            <!-- JS will load users here -->
-                        </tbody>
-                    </table>
-                </div>
+        <div class="box">
+            <h4 style="color:#9ca3af; font-size:12px; text-transform:uppercase; margin-bottom:15px;">💸 Multi-Admin User Balance Control Desk</h4>
+            <div style="margin-bottom:15px; display:flex; gap:10px;">
+                <input type="text" id="targetUser" placeholder="Target User Telegram Name" class="input-field" style="margin:0;">
+                <input type="number" id="targetAmt" placeholder="₹ Amount" class="input-field" style="margin:0; width:100px;">
+                <button class="btn" style="background:#22c55e; width:auto; padding:0 20px;" onclick="adjustBalance('credit')">Add</button>
+                <button class="btn" style="background:#d97706; width:auto; padding:0 20px;" onclick="adjustBalance('debit')">Debit</button>
             </div>
         </div>
-
     </div>
 
-    <!-- Front-end Action Controls script -->
     <script>
-        async function loadUsers() {
-            const res = await fetch('/api/users');
-            const users = await res.json();
-            const tbody = document.getElementById('userTableBody');
-            tbody.innerHTML = users.map(user => `
-                <tr class="border-b border-slate-700 bg-slate-800 hover:bg-slate-750">
-                    <td class="px-4 py-4 font-semibold text-white">${user.username}</td>
-                    <td class="px-4 py-4 text-blue-400">${user.telegram}</td>
-                    <td class="px-4 py-4 font-bold text-green-400">₹${user.balance.toFixed(2)}</td>
-                    <td class="px-4 py-4 flex space-x-2 justify-center">
-                        <input type="number" id="amt-${user.id}" placeholder="Amount" class="w-20 bg-slate-950 border border-slate-700 rounded text-center text-xs text-white focus:outline-none">
-                        <button onclick="updateBalance(${user.id}, 'credit')" class="bg-green-600 hover:bg-green-700 text-white text-xs px-2 py-1 rounded font-bold">Add</button>
-                        <button onclick="updateBalance(${user.id}, 'debit')" class="bg-amber-600 hover:bg-amber-700 text-white text-xs px-2 py-1 rounded font-bold">Debit</button>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        async function updateBalance(userId, action) {
-            const amount = document.getElementById(`amt-${userId}`).value;
-            if(!amount || amount <= 0) return alert("Please enter a valid amount");
-
-            await fetch('/api/admin/update-balance', {
+        let loggedAdmin = "";
+        async function verifyGate() {
+            const username = document.getElementById('admUser').value;
+            const password = document.getElementById('admPass').value;
+            const res = await fetch('/api/admin/login', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId, amount, action, adminName: "Sub-Admin-Alex" })
-            });
-            loadUsers();
-            loadNotifications();
-        }
-
-        async function addAdmin() {
-            const username = document.getElementById('newAdminName').value;
-            if(!username) return alert("Enter admin username");
-            const res = await fetch('/api/admin/add', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username })
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ username, password })
             });
             const data = await res.json();
-            alert(data.message);
-            document.getElementById('newAdminName').value = '';
-            loadNotifications();
+            if(data.success) {
+                loggedAdmin = username;
+                document.getElementById('lockGate').style.display = 'none';
+                document.getElementById('adminGrid').style.display = 'grid';
+                loadLogs();
+            } else { alert("ACCESS DENIED: Credentials Invalid."); }
         }
-
-        async function loadNotifications() {
+        async function adjustBalance(action) {
+            const username = document.getElementById('targetUser').value;
+            const amount = document.getElementById('targetAmt').value;
+            if(!username || !amount) return alert("Saari fields bhariye!");
+            await fetch('/api/admin/update-balance', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ username, amount, action, adminName: loggedAdmin })
+            });
+            alert("Database balance updated successfully!");
+            document.getElementById('targetUser').value=''; document.getElementById('targetAmt').value='';
+            loadLogs();
+        }
+        async function addSubAdmin() {
+            const username = document.getElementById('newSubName').value;
+            const password = document.getElementById('newSubPass').value;
+            if(!username || !password) return alert("Admins fields empty!");
+            await fetch('/api/admin/add', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ username, password })
+            });
+            alert("Naya Admin Authorized Node register ho gaya!");
+            document.getElementById('newSubName').value=''; document.getElementById('newSubPass').value='';
+            loadLogs();
+        }
+        async function loadLogs() {
             const res = await fetch('/api/owner/notifications');
-            const logs = await res.json();
-            const box = document.getElementById('notificationBox');
-            if(logs.length === 0) return;
-            box.innerHTML = logs.map(log => `
-                <div class="p-2 bg-slate-900 rounded border-l-2 border-red-500">
-                    <span class="text-[10px] text-gray-500 block">${log.time}</span>
-                    <span class="text-gray-200">${log.details}</span>
-                </div>
-            `).join('');
+            const data = await res.json();
+            const box = document.getElementById('notifyBox');
+            if(data.length === 0) { box.innerHTML = "No active sub-admin activity logged."; return; }
+            box.innerHTML = data.map(l => `<div style="border-bottom:1px solid #1f2937; padding:4px 0;"><span style="color:#ef4444;">[${l.time}]</span> ${l.details}</div>`).join('');
         }
-
-        // Initial Load
-        loadUsers();
-        loadNotifications();
-        setInterval(loadNotifications, 5000); // Har 5 second mein notification auto refresh hogi
     </script>
 </body>
 </html>
-

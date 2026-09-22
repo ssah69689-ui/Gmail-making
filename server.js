@@ -5,68 +5,72 @@ const path = require('path');
 app.use(express.json());
 app.use(express.static('public'));
 
-// Mock Database (Shuruat ke liye Free memory storage)
-let users = [
-    { id: 1, username: "rahul_dev", balance: 100, telegram: "@rahul" },
-    { id: 2, username: "amit_sharma", balance: 50, telegram: "@amit" }
-];
-
+// 100% Clean Storage Array (No fake names)
+let users = [];
 let admins = [
-    { id: 1, username: "shubham_owner", role: "Owner" }
+    { username: "OWNERSHUBHAM11", password: "8734812286", role: "Owner" }
 ];
+let ownerLogs = [];
+let depositRequests = [];
 
-let ownerLogs = []; // Aapke liye saari notifications yahan save hongi
-let supportTickets = [];
-
-// 1. Add New Admin API
-app.post('/api/admin/add', (req, { username }) => {
-    const newAdmin = { id: admins.length + 1, username, role: "Sub-Admin" };
-    admins.push(newAdmin);
-    
-    // Notification for Owner
-    ownerLogs.unshift({
-        action: "NEW_ADMIN_ADDED",
-        details: `New admin '${username}' was added by Owner.`,
-        time: new Date().toLocaleTimeString()
-    });
-    
-    return res.json({ success: true, message: "Admin added successfully!" });
+// Admin Authentication Check API
+app.post('/api/admin/login', (req, res) => {
+    const { username, password } = req.body;
+    const admin = admins.find(a => a.username === username && a.password === password);
+    if (admin) {
+        return res.json({ success: true, role: admin.role });
+    }
+    res.status(401).json({ success: false, message: "Aapke paas Admin access nahi hai!" });
 });
 
-// 2. Add / Debit Balance API with Notification tracking
-app.post('/api/admin/update-balance', (req, { userId, amount, action, adminName }) => {
-    let user = users.find(u => u.id === parseInt(userId));
-    if (!user) return res.status(404).json({ success: false, message: "User not found" });
+// Add New Sub-Admin (Only by Owner)
+app.post('/api/admin/add', (req, res) => {
+    const { username, password } = req.body;
+    admins.push({ username, password, role: "Sub-Admin" });
+    ownerLogs.unshift({
+        action: "NEW_ADMIN",
+        details: `Sub-Admin '${username}' was authorized successfully.`,
+        time: new Date().toLocaleTimeString()
+    });
+    res.json({ success: true, message: "Naya Sub-Admin successfully add ho gaya!" });
+});
 
-    if (action === 'credit') {
-        user.balance += parseFloat(amount);
-    } else if (action === 'debit') {
-        user.balance = Math.max(0, user.balance - parseFloat(amount));
+// Update Balance API
+app.post('/api/admin/update-balance', (req, res) => {
+    const { username, amount, action, adminName } = req.body;
+    let user = users.find(u => u.username === username);
+    if (!user) {
+        user = { username, balance: 0, telegram: "@" + username, isPremium: false };
+        users.push(user);
     }
 
-    // Aapke liye system automatic notification info generate karega
+    if (action === 'credit') user.balance += parseFloat(amount);
+    if (action === 'debit') user.balance = Math.max(0, user.balance - parseFloat(amount));
+
     ownerLogs.unshift({
         action: action.toUpperCase(),
-        admin: adminName,
-        details: `Admin '${adminName}' ${action === 'credit' ? 'added' : 'debited'} ₹${amount} for user '${user.username}'`,
+        details: `Admin '${adminName}' updated balance for '${username}' by ₹${amount}`,
         time: new Date().toLocaleTimeString()
     });
-
-    res.json({ success: true, newBalance: user.balance });
+    res.json({ success: true });
 });
 
-// 3. Get Owner Logs/Notifications
-app.get('/api/owner/notifications', (req, res) => {
-    res.json(ownerLogs);
+// Buy Premium Logic API
+app.post('/api/user/buy-premium', (req, res) => {
+    const { username } = req.body;
+    let user = users.find(u => u.username === username);
+    if (!user) {
+        user = { username, balance: 0, telegram: "@" + username, isPremium: false };
+        users.push(user);
+    }
+    if(user.balance < 30) return res.json({ success: false, message: "Premium lene ke liye kam se kam ₹30 balance chahiye!" });
+    
+    user.balance -= 30;
+    user.isPremium = true;
+    res.json({ success: true, message: "Congratulations! Aapka Premium Account active ho gaya hai." });
 });
 
-// APIs for fetching lists
 app.get('/api/users', (req, res) => res.json(users));
-
-// Dashboard route
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'admin.html'));
-});
+app.get('/api/owner/notifications', (req, res) => res.json(ownerLogs));
 
 app.listen(3000, () => console.log('Gmail Creator Work platform running on port 3000'));
-

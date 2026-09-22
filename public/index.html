@@ -3,142 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bulk Gmail Panel - User Dashboard</title>
-    <script src="https://tailwindcss.com"></script>
-</head>
-<body class="bg-gray-50 font-sans text-gray-800">
-
-    <!-- Header Section -->
-    <div class="bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center shadow-sm">
-        <div class="flex items-center space-x-3">
-            <div class="w-9 h-9 bg-red-500 rounded-lg flex items-center justify-center text-white font-bold text-xl">M</div>
-            <h2 class="text-xl font-bold text-gray-800">Bulk Gmail Panel</h2>
-        </div>
-        <div class="flex items-center space-x-4">
-            <div class="bg-green-50 border border-green-200 px-3 py-1.5 rounded-lg text-sm">
-                Wallet Balance: <span class="font-bold text-green-600">₹<span id="userBalance">0.00</span></span>
-            </div>
-            <button onclick="toggleModal('depositModal')" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-3 py-2 rounded-lg transition">Add Funds</button>
-        </div>
-    </div>
-
-    <div class="max-w-4xl mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+    <title>Zunoo SMM - Premium Panel</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background: #0b0f19; color: #f1f5f9; min-height: 100vh; padding-bottom: 40px; }
+        .navbar { background: #111827; border-bottom: 2px solid #ef4444; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 0 20px rgba(239,68,68,0.2); }
+        .logo { font-size: 22px; font-weight: 900; tracking: 1px; color: #fff; }
+        .logo span { color: #ef4444; text-shadow: 0 0 10px rgba(239,68,68,0.5); }
+        .wallet-badge { background: #1f2937; border: 1px solid #22c55e; padding: 6px 14px; border-radius: 20px; font-size: 14px; color: #22c55e; font-weight: bold; }
+        .btn-add { background: #2563eb; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .btn-add:hover { background: #1d4ed8; transform: scale(1.05); }
         
-        <!-- LEFT: ORDER FORM & BULK CONFIG -->
-        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <h3 class="text-lg font-bold mb-4 text-gray-800">🚀 Place Bulk Gmail Order</h3>
-            <form id="orderForm" class="space-y-4" onsubmit="placeOrder(event)">
-                <div>
-                    <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Your Telegram Handle / WhatsApp</label>
-                    <input type="text" placeholder="@username or phone number" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm bg-gray-50" required>
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Select Gmail Quantity</label>
-                    <select id="quantity" onchange="calculatePrice()" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm bg-gray-50">
-                        <option value="10">10 Gmail Accounts (₹100)</option>
-                        <option value="20">20 Gmail Accounts (₹200)</option>
-                        <option value="50">50 Gmail Accounts (₹500)</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Preferred Common Password</label>
-                    <input type="password" placeholder="Set password for accounts" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm bg-gray-50" required>
-                </div>
-                <div class="pt-2">
-                    <button type="submit" class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2.5 rounded-lg transition text-sm shadow-sm">
-                        Launch Automatic Creation
-                    </button>
-                </div>
-            </form>
+        .main-container { max-width: 1200px; margin: 40px auto; padding: 0 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        @media (max-width: 768px) { .main-container { grid-template-columns: 1fr; } }
+        
+        .panel { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 25px; position: relative; }
+        .panel-title { font-size: 16px; font-weight: bold; margin-bottom: 20px; border-bottom: 1px solid #1f2937; padding-bottom: 10px; color: #f3f4f6; }
+        
+        .premium-banner { background: linear-gradient(135deg, #1e1b4b, #311042); border: 1px solid #c084fc; border-radius: 8px; padding: 15px; margin-bottom: 20px; text-align: center; }
+        .btn-premium { background: linear-gradient(90deg, #a855f7, #ec4899); color: white; border: none; padding: 8px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px; margin-top: 8px; }
+        
+        .form-group { margin-bottom: 15px; }
+        .form-label { display: block; font-size: 12px; color: #9ca3af; margin-bottom: 6px; text-transform: uppercase; font-weight: 600; }
+        .form-input { width: 100%; background: #1f2937; border: 1px solid #374151; border-radius: 6px; padding: 12px; color: white; font-size: 14px; outline: none; }
+        .form-input:focus { border-color: #ef4444; }
+        
+        .btn-submit { width: 100%; background: #ef4444; color: white; font-weight: bold; border: none; padding: 14px; border-radius: 6px; cursor: pointer; font-size: 15px; box-shadow: 0 4px 15px rgba(239,68,68,0.3); }
+        .inventory-box { background: #1f2937; border: 1px solid #374151; border-radius: 6px; padding: 15px; font-family: monospace; font-size: 13px; color: #38bdf8; height: 180px; overflow-y: auto; }
+        
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 999; backdrop-filter: blur(5px); }
+        .modal.active { display: flex; }
+        .modal-content { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 30px; max-width: 380px; width: 100%; text-align: center; position: relative; }
+        .modal-close { position: absolute; top: 10px; right: 15px; background: none; border: none; color: #9ca3af; font-size: 24px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="logo">Zunoo <span>SMM Pro</span></div>
+        <div class="wallet-area" style="display:flex; align-items:center; gap:15px;">
+            <div class="wallet-badge">Balance: ₹0.00</div>
+            <button onclick="toggleModal('payModal', true)" class="btn-add">Add Funds</button>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <!-- LEFT CONTROL: WORK PANEL & PREMIUM BOX -->
+        <div>
+            <div class="premium-banner">
+                <h4 style="color:#d8b4fe; font-size:14px;">👑 Upgrade To VIP Premium Look</h4>
+                <p style="font-size:11px; color:#9ca3af; margin-top:4px;">Charge: ₹30 Only. Benefit: Per Gmail Price Drops from ₹10 to <b style="color:#22c55e;">₹9/Gmail</b> + Ultra Fast Creation Server Network Active!</p>
+                <button class="btn-premium" onclick="buyPremium()">Buy Premium Mode</button>
+            </div>
+
+            <div class="panel">
+                <div class="panel-title">🚀 Launch Bulk Gmail Order</div>
+                <form onsubmit="event.preventDefault(); alert('Order Denied! Add funds to your wallet account.');">
+                    <div class="form-group">
+                        <label class="form-label">Telegram / WhatsApp Handle</label>
+                        <input type="text" placeholder="@username" class="form-input" id="uName" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Gmail Quantity</label>
+                        <select class="form-input" style="background:#1f2937;">
+                            <option>10 Gmail Accounts (Standard: ₹100 / VIP: ₹90)</option>
+                            <option>20 Gmail Accounts (Standard: ₹200 / VIP: ₹180)</option>
+                            <option>50 Gmail Accounts (Standard: ₹500 / VIP: ₹450)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Common Master Password</label>
+                        <input type="password" placeholder="Define characters password" class="form-input" required>
+                    </div>
+                    <button type="submit" class="btn-submit">Initialize Machine Process</button>
+                </form>
+            </div>
         </div>
 
-        <!-- RIGHT: LIVE INVENTORY BOX (DELIVERED GMAILS) -->
-        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+        <!-- RIGHT AUTOMATED TERMINAL LOGS -->
+        <div class="panel" style="display: flex; flex-direction: column; justify-content: space-between;">
             <div>
-                <h3 class="text-lg font-bold mb-2 text-gray-800">📬 My Purchased Gmails</h3>
-                <p class="text-xs text-gray-500 mb-4">Your automatically created fresh accounts will appear below instantly.</p>
-                
-                <div class="border border-gray-200 rounded-lg p-3 bg-gray-50 font-mono text-xs h-48 overflow-y-auto" id="inventoryBox">
-                    <p class="text-gray-400 italic">No accounts purchased yet. Place an order above to start automation.</p>
+                <div class="panel-title">📬 Delivered Gmail Log Terminal</div>
+                <div class="inventory-box">
+                    [System idle. Database secure network connection online.]
                 </div>
             </div>
-            <button onclick="copyInventory()" class="w-full mt-4 bg-gray-800 hover:bg-gray-900 text-white font-bold py-2 text-xs rounded-lg transition">
-                Copy All Accounts Data
-            </button>
+            <button class="form-input" style="background:#374151; border:none; cursor:pointer; font-weight:bold;" onclick="alert('No accounts to extract.')">Download Bulk Database (.TXT)</button>
         </div>
     </div>
 
-    <!-- 24/7 DYNAMIC TICKET SUPPORT BOX -->
-    <div class="max-w-4xl mx-auto px-4 pb-12">
-        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <h3 class="text-md font-bold text-gray-800 mb-3">💬 24/7 Gmail Creator Work Support</h3>
-            <div class="flex space-x-3">
-                <input type="text" id="ticketMsg" placeholder="Need help with login or wallet delay? Type here..." class="flex-1 text-sm bg-gray-50 border rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-red-500">
-                <button onclick="sendTicket()" class="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs px-4 py-2 rounded-lg transition">Open Support Ticket</button>
+    <!-- 24/7 SUPPORT BAR -->
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+        <div class="panel">
+            <div class="panel-title">💬 24/7 Gmail Creator Work Support Grid</div>
+            <div style="display:flex; gap:15px;">
+                <input type="text" placeholder="Fampay balance tracking issue? Message our sub-admins..." class="form-input" style="flex:1;">
+                <button class="btn-add" style="background:#ef4444;" onclick="alert('Ticket uploaded to admin queue!')">Submit Ticket</button>
             </div>
         </div>
     </div>
 
-    <!-- POP-UP MODAL: ADD FUNDS WITH YOUR REAL QR -->
-    <div id="depositModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-xl p-6 max-w-sm w-full border border-gray-200 shadow-xl relative text-center">
-            <button onclick="toggleModal('depositModal')" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 font-bold text-lg">&times;</button>
-            
-            <h3 class="text-lg font-bold text-gray-900 mb-1">Add Wallet Funds</h3>
-            <p class="text-xs text-gray-500 mb-4">Scan QR code using FamPay or any UPI app to deposit instantly.</p>
-            
-            <!-- AAPKA ASLI QR YAHAN DISPLAY HOGA -->
-            <div class="bg-white p-2 inline-block rounded-lg shadow-inner border border-gray-200 mb-4">
-                <img src="my-qr.png" alt="Scan to Pay" class="w-40 h-40 mx-auto object-contain">
+    <!-- POPUP MODAL QR DEPOSIT -->
+    <div id="payModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="toggleModal('payModal', false)">&times;</button>
+            <h3 style="margin-bottom:5px;">Secure Wallet Deposit</h3>
+            <p style="font-size:12px; color:#9ca3af;">Scan official QR code via FamPay App</p>
+            <div style="background:white; padding:8px; display:inline-block; border-radius:8px; margin:15px 0;">
+                <img src="my-qr.png" alt="QR Link" style="width:150px; height:150px; object-fit:contain; display:block;">
             </div>
-
-            <!-- WITHOUT UPI ID: ONLY UTR NUMBER VERIFICATION -->
-            <form onsubmit="submitDeposit(event)" class="space-y-3 text-left">
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Exact Amount Paid (₹)</label>
-                    <input type="number" id="depAmount" placeholder="e.g. 100" class="w-full px-3 py-1.5 border rounded-lg bg-gray-50 text-sm focus:outline-none" required>
+            <form onsubmit="event.preventDefault(); alert('UTR code transmitted to admin pipeline.'); toggleModal('payModal', false);">
+                <div class="form-group" style="text-align:left;">
+                    <label class="form-label">Exact Amount Transferred</label>
+                    <input type="number" placeholder="₹" class="form-input" required>
                 </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">12-Digit UTR / Transaction Ref ID</label>
-                    <input type="text" maxlength="12" id="depUtr" placeholder="Enter transaction ref number" class="w-full px-3 py-1.5 border rounded-lg bg-gray-50 text-sm focus:outline-none" required>
+                <div class="form-group" style="text-align:left;">
+                    <label class="form-label">12-Digit Ref UTR Number</label>
+                    <input type="text" maxlength="12" placeholder="Enter reference ID" class="form-input" required>
                 </div>
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-2 rounded-lg transition">Submit Deposit Verification</button>
+                <button type="submit" class="btn-submit" style="background:#2563eb; box-shadow:none;">Submit to System Database</button>
             </form>
         </div>
     </div>
 
     <script>
-        function toggleModal(modalId) {
-            const modal = document.getElementById(modalId);
-            modal.classList.toggle('hidden');
+        function toggleModal(id, show) {
+            const m = document.getElementById(id);
+            if(show) m.classList.add('active'); else m.classList.remove('active');
         }
-
-        function calculatePrice() {
-            // Dropdown change detection, text changes color dynamically
-        }
-
-        function submitDeposit(e) {
-            e.preventDefault();
-            const amount = document.getElementById('depAmount').value;
-            const utr = document.getElementById('depUtr').value;
-            alert(`Deposit Request Submitted! Your UTR ${utr} for ₹${amount} is sent to our admin system queue for verification.`);
-            toggleModal('depositModal');
-            document.getElementById('depAmount').value = '';
-            document.getElementById('depUtr').value = '';
-        }
-
-        function placeOrder(e) {
-            e.preventDefault();
-            alert("Order failed! Your wallet balance is ₹0.00. Please click 'Add Funds' and verify payment with admins.");
-        }
-
-        function sendTicket() {
-            const msg = document.getElementById('ticketMsg').value;
-            if(!msg) return;
-            alert(`Ticket raised under 'Gmail Creator Work' channel! Admins will respond in less than 5 minutes.`);
-            document.getElementById('ticketMsg').value = '';
+        async function buyPremium() {
+            const username = document.getElementById('uName').value;
+            if(!username) return alert("Pehle upar apna Telegram username dalein!");
+            alert("Processing request... Premium activation code running.");
         }
     </script>
 </body>
 </html>
-

@@ -58,9 +58,16 @@ app.post('/api/user/login', (req, res) => {
     res.json({ success: false, message: "Mobile Number ya Password galat hai! Dubara check karein." });
 });
 
-// 📥 UTR Secure Cash Deposit Queue Handler
+// 📥 // 📥 UTR Secure Cash Deposit Queue Handler (With 50 Rupees Minimum Restriction)
 app.post('/api/user/submit-utr', (req, res) => {
     const { username, amount, utr } = req.body;
+    
+    // 🚨 STRENGTHENED SAFETY FILTER: Minimum ₹50 wallet deposit condition
+    let depositAmount = parseFloat(amount);
+    if (depositAmount < 50) {
+        return res.json({ success: false, message: "Galti: Website mein minimum deposit limit ₹50 hai!" });
+    }
+
     stats.totalPaymentsToday += 1;
     ownerLogs.unshift({
         action: "DEPOSIT_REQUEST",
@@ -69,6 +76,7 @@ app.post('/api/user/submit-utr', (req, res) => {
     });
     res.json({ success: true, message: "UTR Grid Transmitted! Sub-Admins verify kar rahe hain." });
 });
+
 
 // 👑 Add Sub-Admin Authority Terminal (Owner Only Command)
 app.post('/api/admin/add-sub', (req, res) => {

@@ -7,22 +7,31 @@
     <style>
         * { box-sizing: border-box; margin:0; padding:0; font-family: 'Segoe UI', sans-serif; }
         body { background: #04060d; color: #f1f5f9; min-height: 100vh; padding-bottom: 90px; }
+        
+        /* 🔐 ULTRA PREMIUM BLACK DARK AUTH UI (SHREEWIN STYLE) */
         .auth-container { max-width: 380px; margin: 60px auto; padding: 20px; }
         .auth-box { background: #090d16; border: 2px solid #ef4444; border-radius: 16px; padding: 25px; box-shadow: 0 0 25px rgba(239,68,68,0.2); text-align: center; }
-        .brand-title { font-size: 24px; font-weight: 900; color: #fff; text-transform: uppercase; margin-bottom: 20px; }
+        .brand-title { font-size: 24px; font-weight: 900; color: #fff; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; }
         .brand-title span { color: #ef4444; text-shadow: 0 0 10px rgba(239,68,68,0.5); }
         .form-input { width: 100%; background: #111827; border: 1px solid #1f2937; border-radius: 8px; padding: 12px; color: white; font-size: 14px; margin-top: 8px; outline: none; }
-        .form-input:focus { border-color: #ef4444; }
-        .btn-submit { width: 100%; background: #ef4444; color: white; font-weight: bold; border: none; padding: 14px; border-radius: 8px; cursor: pointer; margin-top: 15px; font-size: 14px; box-shadow: 0 4px 12px rgba(239,68,68,0.3); }
+        .form-input:focus { border-color: #ef4444; box-shadow: 0 0 8px rgba(239,68,68,0.2); }
+        .btn-submit { width: 100%; background: #ef4444; color: white; font-weight: bold; border: none; padding: 14px; border-radius: 8px; cursor: pointer; margin-top: 15px; font-size: 14px; box-shadow: 0 4px 12px rgba(239,68,68,0.3); transition: 0.2s; }
+        .btn-submit:hover { background: #dc2626; }
         .btn-support-time { background: #1e1b4b; border: 1px solid #6366f1; color: #a855f7; font-size: 11px; font-weight: bold; padding: 10px; border-radius: 8px; cursor: pointer; margin-top: 10px; width: 100%; }
+
+        /* 📱 MAIN RUNTIME DASHBOARD LAYOUT */
         #appContainer { display: none; }
         .tab-content { display: none; padding: 20px; max-width: 600px; margin: 0 auto; }
         .tab-content.active { display: block; }
         .panel { background: #090d16; border: 1px solid #1f2937; border-radius: 14px; padding: 20px; margin-bottom: 22px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
         .panel-title { font-size: 14px; font-weight: bold; color: #e2e8f0; border-bottom: 1px solid #1f2937; padding-bottom: 8px; margin-bottom: 15px; text-transform: uppercase; }
-        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #090d16; border-top: 1px solid #1f2937; display: flex; justify-content: space-around; padding: 12px 0; z-index: 999; }
+        
+        /* 📱 6 BUTTONS BOTTOM NAV BAR */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #090d16; border-top: 1px solid #1f2937; display: flex; justify-content: space-around; padding: 12px 0; z-index: 999; box-shadow: 0 -5px 20px rgba(0,0,0,0.6); }
         .nav-item { color: #94a3b8; border: none; background: none; font-size: 10px; font-weight: bold; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
         .nav-item.active { color: #ef4444; text-shadow: 0 0 10px rgba(239,68,68,0.3); }
+        
+        /* Chat & Support Categories */
         .support-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
         .btn-cat { background: #111827; border: 1px solid #1f2937; color: #94a3b8; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 12px; cursor: pointer; }
         .btn-cat.active { border-color: #ef4444; color: #ef4444; background: rgba(239,68,68,0.05); }
@@ -37,7 +46,7 @@
 </head>
 <body>
 
-    <!-- 🔐 LOGIN / REGISTER MODULE (SHREEWIN MOBILE MODE) -->
+    <!-- 🔐 LOGIN / REGISTER PAGE MODULE -->
     <div id="authContainer" class="auth-container">
         <div id="loginBox" class="auth-box">
             <div class="brand-title">Gmail Maker <span>SMM</span></div>
@@ -62,11 +71,12 @@
             </form>
         </div>
     </div>
-
-    <!-- 📱 APPLICATION WRAPPER DASHBOARD -->
+    <!-- 📱 MAIN SYSTEM CORE DASHBOARD APPLICATION CONTAINER -->
     <div id="appContainer">
-        <!-- 🏠 HOME TAB -->
+        
+        <!-- 🏠 TAB 1: HOME (GMAIL MACHINE & LOTTERIES) -->
         <div id="homeTab" class="tab-content active">
+            <!-- ₹100 High-Tier Lottery Arena -->
             <div class="panel" style="background: linear-gradient(135deg, #161212, #3b0707); border-color: #ef4444;">
                 <h3 style="color:#f87171;">🔥 High-Tier Ultra Lottery (₹100/Ticket)</h3>
                 <p style="font-size:11px; color:#cbd5e1; margin-top:3px;">Prize: <b>20 Premium Gmail Accounts!</b> [🔒 Admin Controlled Draw]</p>
@@ -80,8 +90,10 @@
                 </div>
             </div>
 
+            <!-- ₹31 Standard Lottery -->
             <div class="panel" style="background: linear-gradient(135deg, #0b1120, #1e1035); border-color: #8b5cf6;">
                 <h3 style="color:#c084fc;">🔮 Standard Cyber Draw (₹31/Ticket)</h3>
+                <p style="font-size:11px; color:#94a3b8; margin-top:3px;">Prize: 10 Gmail Accounts | Minimum 5 entries required.</p>
                 <div id="stdLotteryStatus" style="font-size:12px; color:#22c55e; font-weight:bold; margin:10px 0;">Loading stats...</div>
                 <div style="display:flex; justify-content:center; gap:10px;">
                     <input type="number" id="stdTktCount" value="1" min="1" class="form-input" style="width:70px; margin:0; text-align:center;">
@@ -89,6 +101,7 @@
                 </div>
             </div>
 
+            <!-- Make a Gmail Form Section (4 Inputs) -->
             <div class="panel">
                 <div class="panel-title">⚙️ Make a Gmail Form</div>
                 <form onsubmit="event.preventDefault(); alert('Order Locked! Wallet Balance Kam Hai. Account Tab par jayein.');">
@@ -100,8 +113,7 @@
                 </form>
             </div>
         </div>
-
-        <!-- 💬 CUST SUPPORT TAB -->
+        <!-- 💬 TAB 2: CUSTOMER SUPPORT (CATEGORIZED TICKETS) -->
         <div id="supportTab" class="tab-content">
             <div class="panel">
                 <div class="panel-title">💬 Customer Support Center</div>
@@ -110,11 +122,223 @@
                     <button class="btn-cat" onclick="selectCategory('Deposit Problem', this)">Deposit Problem</button>
                     <button class="btn-cat" onclick="selectCategory('Game Problem', this)">Game Problem</button>
                 </div>
+                
                 <div id="problemFormBox" style="display:none; margin-top:15px; border-top:1px solid #1f2937; padding-top:15px;">
                     <h5 style="font-size:12px; color:#94a3b8; text-transform:uppercase;" id="selectedCatTitle">Describe Me</h5>
                     <textarea id="problemDesc" placeholder="Describe your issue details here..." class="form-input" style="height:80px; resize:none;"></textarea>
+                    
+                    <!-- 🖼️ GALLERY SCREENSHOT FILE UPLOAD FIELD -->
                     <div style="margin-top:10px;">
-Upload Screenshot (Gallery)Submit Ticket🔄 Process Query📜 My All Doubts👥 Referral & Earn SystemCopy Link📢 Official Channels🔹Join Telegram Official Channel https://t.me/+Xh-YZmj5IVdmYWM1 📈 Live Gmail Tracking Server[📶 Proxy Array: ONLINE] [🤖 Bot Pipeline: STANDBY][⚡ System Status: Idle. Request queue clear.]📬 My Gmail Order (Delivery Box)// Database Empty. Accounts drop here after win.Download List (.TXT)Available Wallet Balance₹0.00Add Wallet FundsRedeem🚪 Log Out Account🏠Home💬Cust Support👥Referral📈Live Tracking📬My Gmail👤Account×⏱️ Secure session ends: 05:00Scan Official QR FrameSubmit Verificationlet activeUser = localStorage.getItem('ZunooLoggedInUser');let chosenCategory = ""; let currentView = "process"; let timerInterval;if(activeUser) { showDashboardView(); }function showAuthScreen(screen) { document.getElementById('loginBox').style.display = screen === 'login' ? 'block' : 'none'; document.getElementById('registerBox').style.display = screen === 'register' ? 'block' : 'none'; }async function handleUserRegister(e) {e.preventDefault();let name = document.getElementById('regName').value; let username = document.getElementById('regPhone').value; let password = document.getElementById('regPass').value;const res = await fetch('/api/user/register', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ name, username, password }) });let d = await res.json(); alert(d.message); if(d.success) showAuthScreen('login');}async function handleUserLogin(e) {e.preventDefault();let username = document.getElementById('logPhone').value; let password = document.getElementById('logPass').value;const res = await fetch('/api/user/login', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ username, password }) });let d = await res.json(); if(d.success) { localStorage.setItem('ZunooLoggedInUser', d.username); activeUser = d.username; showDashboardView(); } else { alert(d.message); }}function showDashboardView() { document.getElementById('authContainer').style.display = 'none'; document.getElementById('appContainer').style.display = 'block'; document.getElementById('refLinkUrl').value = window.location.origin + "/ref=" + activeUser; syncLotteryArena(); setInterval(syncLotteryArena, 5000); }function logOutUserAccount() { localStorage.removeItem('ZunooLoggedInUser'); window.location.reload(); }function switchTab(tId, b) { document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active')); document.querySelectorAll('.nav-item').forEach(btn=>btn.classList.remove('active')); document.getElementById(tId).classList.add('active'); b.classList.add('active'); }function openDepositBox() { document.getElementById('payGatewayModal').classList.add('active'); startTimer(300); }function closeDepositBox() { document.getElementById('payGatewayModal').classList.remove('active'); clearInterval(timerInterval); }function startTimer(duration) {let timer = duration, m, s; clearInterval(timerInterval);timerInterval = setInterval(() => {m = parseInt(timer / 60, 10); s = parseInt(timer % 60, 10); m = m < 10 ? "0" + m : m; s = s < 10 ? "0" + s : s; document.getElementById('countdownBox').innerText = "⏱️ Secure session ends: " + m + ":" + s;if (--timer < 0) { closeDepositBox(); alert("Session Timeout!"); }}, 1000);}function openTimeLockedSupport() { let h = new Date().getHours(); if(h >= 15 && h < 18) { alert("Custom Support active. Handle loop active."); } else { alert("⏳ Password change service is only active between 03:00 PM and 06:00 PM IST! Please come back then."); } }function selectCategory(cat, btn) { chosenCategory = cat; document.querySelectorAll('.support-grid .btn-cat').forEach(b => b.classList.remove('active')); btn.classList.add('active'); document.getElementById('problemFormBox').style.display = 'block'; document.getElementById('selectedCatTitle').innerText = "Describe Me (" + cat + ")"; }async function submitSupportTicket() { let desc = document.getElementById('problemDesc').value; if(!desc) return alert("Pehle apni dikqat likhein!"); await fetch('/api/user/create-ticket', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ username: activeUser, category: chosenCategory, description: desc }) }); alert("Ticket submitted!"); document.getElementById('problemDesc').value=''; document.getElementById('problemFormBox').style.display='none'; syncLotteryArena(); }function toggleSupportView(view) { currentView = view; syncLotteryArena(); }async function buyLottery(tier) { let count = tier === 'high' ? document.getElementById('highTktCount').value : document.getElementById('stdTktCount').value; const res = await fetch('/api/lottery/buy', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ username: activeUser, count, tier }) }); let d = await res.json(); alert(d.message); syncLotteryArena(); }async function redeemGiftCode() { let code = document.getElementById('gCodeInp').value; const res = await fetch('/api/user/redeem-gift', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ username: activeUser, code }) }); let d = await res.json(); alert(d.message); document.getElementById('gCodeInp').value = ''; syncLotteryArena(); }async function sendUtrCode(e) { e.preventDefault(); let amt = document.getElementById('payAmt').value; let utr = document.getElementById('payUtr').value; const res = await fetch('/api/user/submit-utr', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ username: activeUser, amount: amt, utr }) }); let d = await res.json(); alert(d.message); if(d.success) closeDepositBox(); }async function syncLotteryArena() {if(!activeUser) return; const res = await fetch('/api/lottery/status'); const d = await res.json(); document.getElementById('stdLotteryStatus').innerText = Pool: ${d.stdCount} Tickets | Status: ${d.standard.status}; document.getElementById('highLotteryStatus').innerText = Total Tickets Bought: ${d.highCount};const uRes = await fetch('/api/users'); const uData = await uRes.json(); let me = uData.find(u => u.username === activeUser); if(me) document.getElementById('topWalletBalance').innerText = ₹${me.balance.toFixed(2)};if(d.highWinners.length > 0) { document.getElementById('highWinnersBox').innerHTML = d.highWinners.map(w => <div>🏆 @${w.username} won ${w.prize}</div>).join(''); }const tRes = await fetch('/api/tickets/all'); const tData = await tRes.json(); let myTickets = tData.filter(t => t.username === activeUser); let container = document.getElementById('ticketLogsContainer'); let displayTkts = myTickets.filter(t => t.status === (currentView === 'process' ? 'Process Query' : 'My All Doubts'));if(displayTkts.length === 0) { container.innerHTML = <p style="font-size:11px; color:#94a3b8; font-style:italic;">No tickets here.</p> ; return; }container.innerHTML = displayTkts.map(t => <div class="panel" style="padding:10px; margin-bottom:8px; font-size:12px;"><b style="color:#ef4444;">[${t.category}]</b><p style="color:#fff; margin-top:2px;">Me: ${t.description}</p><p style="color:#38bdf8; margin-top:4px; font-weight:bold;">Supporter: ${t.reply}</p></div>).join('');}
-</script>
+                        <label style="font-size:11px; color:#94a3b8; display:block; margin-bottom:4px;">Upload Screenshot (Gallery)</label>
+                        <input type="file" accept="image/*" class="form-input" style="padding:6px; cursor:pointer;">
+                    </div>
+                    <button class="btn-submit" onclick="submitSupportTicket()" style="background:#10b981;">Submit Ticket</button>
+                </div>
+                
+                <!-- History Trackers Options -->
+                <div style="margin-top:20px; display:flex; gap:10px;">
+                    <button class="btn-cat" style="flex:1;" onclick="toggleSupportView('process')">🔄 Process Query</button>
+                    <button class="btn-cat" style="flex:1;" onclick="toggleSupportView('doubts')">📜 My All Doubts</button>
+                </div>
+                <div id="ticketLogsContainer" style="margin-top:15px; max-height:200px; overflow-y:auto;"></div>
+            </div>
+        </div>
+        <!-- 👥 TAB 3: REFERRAL SYSTEM (WITH OFFICIAL TELEGRAM LINK) -->
+        <div id="referralTab" class="tab-content">
+            <div class="panel" style="text-align:center;">
+                <div class="panel-title" style="text-align:left;">👥 Referral & Earn System</div>
+                <p style="font-size:13px; color:#94a3b8;">Aapka Personal Invite Link:</p>
+                <input type="text" id="refLinkUrl" readonly class="form-input" style="text-align:center; color:#10b981; font-weight:bold;">
+                <button class="btn-submit" style="background:#3b82f6;" onclick="alert('Link Copied!')">Copy Link</button>
+                
+                <div style="margin-top:25px; border-top:1px solid #1f2937; padding-top:20px; text-align:left;">
+                    <h4>📢 Official Channels</h4>
+                    <a href="https://t.me" target="_blank" class="tg-channel-card" style="text-decoration:none;">
+                        <span style="font-size:22px;">🔹</span>
+                        <div>
+                            <b style="color:#fff; font-size:14px; display:block;">Join Telegram Official Channel</b>
+                            <span style="color:#38bdf8; font-size:11px;">Earning • FreeGiveway (MESSAGE WORK)</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 📈 TAB 4: LIVE GMAIL TRACKING -->
+        <div id="trackingTab" class="tab-content">
+            <div class="panel">
+                <div class="panel-title">📈 Live Gmail Tracking Server</div>
+                <div style="background:#02050c; border-radius:8px; padding:20px; font-family:monospace; font-size:12px; color:#10b981; line-height:1.6; border:1px solid #10b981;">
+                    [📶 Proxy Array: ONLINE] [🤖 Bot Pipeline: STANDBY]<br>[⚡ System Status: Idle. Request queue clear.]
+                </div>
+            </div>
+        </div>
+
+        <!-- 📬 TAB 5: MY GMAIL ORDER -->
+        <div id="inventoryTab" class="tab-content">
+            <div class="panel">
+                <div class="panel-title">📬 My Gmail Order (Delivery Box)</div>
+                <div style="background:#02050c; border:1px solid #1f2937; border-radius:8px; padding:15px; font-family:monospace; font-size:13px; color:#38bdf8; height:180px; overflow-y:auto; margin-bottom:15px;">// Database Empty. Accounts drop here after win.</div>
+                <button class="btn-submit" style="background:#475569;" onclick="alert('Database history empty.')">Download List (.TXT)</button>
+            </div>
+        </div>
+
+        <!-- 👤 TAB 6: ACCOUNT -->
+        <div id="accountTab" class="tab-content">
+            <div class="panel" style="text-align:center;">
+                <p style="font-size:13px; color:#94a3b8;">Available Wallet Balance</p>
+                <h1 id="topWalletBalance" style="color:#22c55e; font-size:36px; margin:5px 0; font-weight:900;">₹0.00</h1>
+                <button onclick="openDepositBox()" class="btn-submit" style="background:#2563eb; width:auto; padding:8px 25px;">Add Wallet Funds</button>
+                <div style="margin-top:25px; display:flex; gap:10px;"><input type="text" id="gCodeInp" placeholder="Enter Gift Code" class="form-input" style="margin:0;"><button onclick="redeemGiftCode()" class="btn-submit" style="margin:0; width:auto; padding:0 15px; background:#10b981;">Redeem</button></div>
+            </div>
+            <button class="btn-submit" style="background:#374151; margin-top:-10px;" onclick="logOutUserAccount()">🚪 Log Out Account</button>
+        </div>
+
+        <!-- 📱 6 BUTTON BOTTOM NAV FIX SYSTEM -->
+        <div class="bottom-nav">
+            <button class="nav-item active" onclick="switchTab('homeTab', this)"><span>🏠</span>Home</button>
+            <button class="nav-item" onclick="switchTab('supportTab', this)"><span>💬</span>Cust Support</button>
+            <button class="nav-item" onclick="switchTab('referralTab', this)"><span>👥</span>Referral</button>
+            <button class="nav-item" onclick="switchTab('trackingTab', this)"><span>📈</span>Live Tracking</button>
+            <button class="nav-item" onclick="switchTab('inventoryTab', this)"><span>📬</span>My Gmail</button>
+            <button class="nav-item" onclick="switchTab('accountTab', this)"><span>👤</span>Account</button>
+        </div>
+    </div>
+
+    <!-- 💳 5-MINUTE LIVE TIMER DEPOSIT MODAL -->
+    <div id="payGatewayModal" class="modal">
+        <div class="modal-content modal-card">
+            <button onclick="closeDepositBox()" style="position:absolute; top:12px; right:18px; background:none; border:none; color:white; font-size:24px; cursor:pointer;">&times;</button>
+            <div id="countdownBox" class="timer-banner">⏱️ Secure session ends: 05:00</div>
+            <h4>Scan Official QR Frame</h4>
+            <p style="font-size:11px; color:#94a3b8;">Bina UPI leak karein direct wallet add karein (Min ₹50)</p>
+            <div class="qr-wrapper"><img src="my-qr.png" alt="Official QR" class="qr-frame-img"></div>
+            <form onsubmit="sendUtrCode(event)">
+                <input type="number" id="payAmt" placeholder="Exact Cash Paid (Min ₹50)" class="form-input" required>
+                <input type="text" id="payUtr" maxlength="12" placeholder="12-Digit Reference UTR Number" class="form-input" required>
+                <button type="submit" class="btn-submit" style="background:#22c55e;">Submit Verification</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        let activeUser = localStorage.getItem('ZunooLoggedInUser');
+        let chosenCategory = ""; let currentView = "process"; let timerInterval;
+        
+        if(activeUser) { showDashboardView(); }
+        
+        function showAuthScreen(screen) { 
+            document.getElementById('loginBox').style.display = screen === 'login' ? 'block' : 'none'; 
+            document.getElementById('registerBox').style.display = screen === 'register' ? 'block' : 'none'; 
+        }
+        
+        async function handleUserRegister(e) {
+            e.preventDefault();
+            let name = document.getElementById('regName').value; 
+            let username = document.getElementById('regPhone').value; 
+            let password = document.getElementById('regPass').value;
+            const res = await fetch('/api/user/register', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ name, username, password }) });
+            let d = await res.json(); alert(d.message); if(d.success) showAuthScreen('login');
+        }
+        
+        async function handleUserLogin(e) {
+            e.preventDefault();
+            let username = document.getElementById('logPhone').value; 
+            let password = document.getElementById('logPass').value;
+            const res = await fetch('/api/user/login', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ username, password }) });
+            let d = await res.json(); 
+            if(d.success) { localStorage.setItem('ZunooLoggedInUser', d.username); activeUser = d.username; showDashboardView(); } 
+            else { alert(d.message); }
+        }
+        
+        function showDashboardView() { 
+            document.getElementById('authContainer').style.display = 'none'; 
+            document.getElementById('appContainer').style.display = 'block'; 
+            document.getElementById('refLinkUrl').value = window.location.origin + "/ref=" + activeUser; 
+            syncLotteryArena(); setInterval(syncLotteryArena, 5000); 
+        }
+        
+        function logOutUserAccount() { localStorage.removeItem('ZunooLoggedInUser'); window.location.reload(); }
+        
+        function switchTab(tId, b) { 
+            document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active')); 
+            document.querySelectorAll('.nav-item').forEach(btn=>btn.classList.remove('active')); 
+            document.getElementById(tId).classList.add('active'); 
+            b.classList.add('active'); 
+        }
+        
+        function openDepositBox() { document.getElementById('payGatewayModal').classList.add('active'); startTimer(300); }
+        
+        function closeDepositBox() { document.getElementById('payGatewayModal').classList.remove('active'); clearInterval(timerInterval); }
+        
+        function startTimer(duration) {
+            let timer = duration, m, s; clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                m = parseInt(timer / 60, 10); s = parseInt(timer % 60, 10); 
+                m = m < 10 ? "0" + m : m; s = s < 10 ? "0" + s : s; 
+                document.getElementById('countdownBox').innerText = "⏱️ Secure session ends: " + m + ":" + s;
+                if (--timer < 0) { closeDepositBox(); alert("Session Timeout!"); }
+            }, 1000);
+        }
+        
+        function openTimeLockedSupport() { 
+            let h = new Date().getHours(); 
+            if(h >= 15 && h < 18) { alert("Custom Support active. Handle loop active."); } 
+            else { alert("⏳ Password change service is only active between 03:00 PM and 06:00 PM IST! Please come back then."); } 
+        }
+        
+        function selectCategory(cat, btn) { 
+            chosenCategory = cat; 
+            document.querySelectorAll('.support-grid .btn-cat').forEach(b => b.classList.remove('active')); 
+            btn.classList.add('active'); 
+            document.getElementById('problemFormBox').style.display = 'block'; 
+            document.getElementById('selectedCatTitle').innerText = "Describe Me (" + cat + ")"; 
+        }
+        
+        async function submitSupportTicket() { 
+            let desc = document.getElementById('problemDesc').value; 
+            if(!desc) return alert("Pehle apni dikqat likhein!"); 
+            await fetch('/api/user/create-ticket', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ username: activeUser, category: chosenCategory, description: desc }) }); 
+            alert("Ticket submitted!"); document.getElementById('problemDesc').value=''; document.getElementById('problemFormBox').style.display='none'; syncLotteryArena(); 
+        }
+        
+        function toggleSupportView(view) { currentView = view; syncLotteryArena(); }
+        
+        async function buyLottery(tier) { 
+            let count = tier === 'high' ? document.getElementById('highTktCount').value : document.getElementById('stdTktCount').value; 
+            const res = await fetch('/api/lottery/buy', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ username: activeUser, count, tier }) }); 
+            let d = await res.json(); alert(d.message); syncLotteryArena(); 
+        }
+        
+        async function redeemGiftCode() { 
+            let code = document.getElementById('gCodeInp').value; 
+            const res = await fetch('/api/user/redeem-gift', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ username: activeUser, code }) }); 
+            let d = await res.json(); alert(d.message); document.getElementById('gCodeInp').value = ''; syncLotteryArena(); 
+        }
+        
+        async function sendUtrCode(e) { 
+            e.preventDefault(); 
+            let amt = document.getElementById('payAmt').value; 
+            let utr = document.getElementById('payUtr').value; 
+            const res = await fetch('/api/user/submit-utr', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ username: activeUser, amount: amt, utr }) }); 
+            let d = await res.json(); alert(d.message); if(d.success) closeDepositBox(); 
+        }
+        
+        async function syncLotteryArena() {
+            if(!activeUser) return; 
+            const res = await fetch('/api/lottery/status'); const d = await res.json(); 
+            document.getElementById('stdLotteryStatus').innerText = `Pool: ${d.stdCount} Tickets | Status: ${d.standard.status}`; 
+            document.getElementById('highLotteryStatus').innerText = `Total Tickets Bought: ${d.highCount}`;
+            const uRes = await fetch('/api/users'); const uData = await uRes.json(); 
+            let me = uData.find(u => u.username === activeUser); 
+            if(me) document.getElementById('topWalletBalance').innerText = `₹${me.balance.toFixed(2)}`;
+            if(d.highWinners.length > 0) { document.getElementById('highWinnersBox').innerHTML = d.highWinners.map(w => `<div>🏆 @${w.username} won ${w.prize}</div>`).join(''); }
+            const tRes = await fetch('/api/tickets/all'); const tData = await tRes.json(); 
+            let myTickets = tData.filter(t => t.username === activeUser); 
+            let container = document.getElementById('ticketLogsContainer'); 
+            let displayTkts = myTickets.filter(t => t.status === (currentView === 'process' ? 'Process Query' : 'My All Doubts'));
+            if(displayTkts.length === 0) { container.innerHTML = `<p style="font-size:11px; color:#94a3b8; font-style:italic;">No tickets here.</p>`; return; }
+            container.innerHTML = displayTkts.map(t => `<div class="panel" style="padding:10px; margin-bottom:8px; font-size:12px;"><b style="color:#ef4444;">[${t.category}]</b><p style="color:#fff; margin-top:2px;">Me: ${t.description}</p><p style="color:#38bdf8; margin-top:4px; font-weight:bold;">Supporter: ${t.reply}</p></div>`).join('');
+        }
+    </script>
 </body>
 </html>

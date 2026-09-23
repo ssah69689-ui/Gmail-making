@@ -5,16 +5,16 @@ const path = require('path');
 app.use(express.json());
 app.use(express.static('public'));
 
-// 🔒 100% Clean Hardened Memory Database
+// 🔒 Hardened Secure Memory Database
 let users = [];
 let admins = [{ username: "OWNERSHUBHAM11", password: "8734812286", role: "Owner" }];
 let ownerLogs = [];
 let standardTickets = [];
 let highTickets = []; 
 let giftCodes = []; 
-let supportTickets = []; // Categorized ticketing database
+let supportTickets = []; // Categorized ticketing system database
 
-// Analytics Grid Telemetry Stats
+// Live Analytics Telemetry Stats Grid
 let stats = {
     totalPaymentsToday: 0,
     approvedPaymentsToday: 0,
@@ -25,12 +25,12 @@ let stats = {
 let standardHistory = { winner: null, status: "Subah 12:01 se Ticket Counter chalu hai!" };
 let highWinnerList = []; 
 
-// 👑 Admin Core Authenticator Login
+// 👑 Admin Core Authenticator Gate Login
 app.post('/api/admin/login', (req, res) => {
     const { username, password } = req.body;
     const admin = admins.find(a => a.username === username && a.password === password);
     if (admin) return res.json({ success: true, role: admin.role });
-    res.status(401).json({ success: false, message: "Cyber Shield Check: Access Critical Mismatch!" });
+    res.status(401).json({ success: false, message: "Security Barrier: Invalid Admin Keys!" });
 });
 
 // 👤 User Premium Registration (Mobile Number Login Validation Core)
@@ -50,7 +50,7 @@ app.post('/api/user/register', (req, res) => {
     res.json({ success: true, message: "Registration successful! Ab login box mein jao." });
 });
 
-// 👤 User Secure Authorization Login
+// 👤 User Secure Authorization Login (ShreeWin Mobile Matching Core)
 app.post('/api/user/login', (req, res) => {
     const { username, password } = req.body;
     let user = users.find(u => u.username === username && u.password === password);
@@ -58,11 +58,11 @@ app.post('/api/user/login', (req, res) => {
     res.json({ success: false, message: "Mobile Number ya Password galat hai! Dubara check karein." });
 });
 
-// 📥 // 📥 UTR Secure Cash Deposit Queue Handler (With 50 Rupees Minimum Restriction)
+// 📥 UTR Secure Cash Deposit Queue Handler (With 50 Rupees Minimum Restriction)
 app.post('/api/user/submit-utr', (req, res) => {
     const { username, amount, utr } = req.body;
     
-    // 🚨 STRENGTHENED SAFETY FILTER: Minimum ₹50 wallet deposit condition
+    // 🚨 WALLET SAFETY LIMIT FILTER: Minimum ₹50 wallet deposit lock
     let depositAmount = parseFloat(amount);
     if (depositAmount < 50) {
         return res.json({ success: false, message: "Galti: Website mein minimum deposit limit ₹50 hai!" });
@@ -76,8 +76,6 @@ app.post('/api/user/submit-utr', (req, res) => {
     });
     res.json({ success: true, message: "UTR Grid Transmitted! Sub-Admins verify kar rahe hain." });
 });
-
-
 // 👑 Add Sub-Admin Authority Terminal (Owner Only Command)
 app.post('/api/admin/add-sub', (req, res) => {
     const { username, password } = req.body;

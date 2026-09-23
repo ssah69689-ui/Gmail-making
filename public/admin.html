@@ -3,104 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Master Grid Control - Secure Admin</title>
+    <title>Master Grid Core - Control Shield</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-        body { background: #030712; color: #f9fafb; min-height: 100vh; padding: 30px; }
-        .lock-container { max-width: 360px; margin: 100px auto; background: #111827; border: 1px solid #ef4444; border-radius: 12px; padding: 30px; text-align: center; box-shadow: 0 0 30px rgba(239,68,68,0.2); }
-        .dashboard-layout { display: none; max-width: 1200px; margin: 0 auto; grid-template-columns: 1fr 2fr; gap: 30px; }
-        .box { background: #111827; border: 1px solid #1f2937; border-radius: 10px; padding: 20px; }
-        .input-field { width:100%; background:#1f2937; border:1px solid #374151; padding:10px; color:white; border-radius:6px; margin-bottom:12px; outline:none; }
-        .btn { width:100%; background:#ef4444; color:white; font-weight:bold; border:none; padding:10px; border-radius:6px; cursor:pointer; }
+        * { box-sizing: border-box; margin:0; padding:0; font-family: 'Segoe UI', sans-serif; }
+        body { background: #02040a; color: #f0f6fc; min-height: 100vh; padding: 25px; }
+        .gate-box { max-width: 360px; margin: 120px auto; background: #0d1117; border: 2px solid #ea6060; border-radius: 12px; padding: 35px; text-align: center; box-shadow: 0 0 40px rgba(234,96,96,0.15); }
+        .grid-core { display: none; max-width: 1200px; margin: 0 auto; grid-template-columns: 1fr 2fr; gap: 30px; }
+        .panel-card { background: #0d1117; border: 1px solid #21262d; border-radius: 10px; padding: 20px; }
+        .inp-text { width:100%; background:#010409; border:1px solid #30363d; padding:12px; color:white; border-radius:6px; margin-bottom:12px; outline:none; }
+        .btn-action { width:100%; background:#da3637; color:white; font-weight:bold; border:none; padding:12px; border-radius:6px; cursor:pointer; }
+        .stat-card-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .stat-mini-box { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 12px; text-align: center; }
     </style>
 </head>
 <body>
 
-    <!-- SECURE INTERCEPT GATEWAY LOGIN -->
-    <div id="lockGate" class="lock-container">
-        <h3 style="color:#ef4444; margin-bottom:5px;">🔒 Cyber Gate Shield</h3>
-        <p style="font-size:12px; color:#9ca3af; margin-bottom:20px;">Unauthorized Entry is Strictly Logged</p>
-        <input type="text" id="admUser" placeholder="Enter Master Username" class="input-field">
-        <input type="password" id="admPass" placeholder="Enter Security Code" class="input-field">
-        <button class="btn" onclick="verifyGate()">Verify Identity</button>
+    <!-- 🔒 HARDENED CYBER GATE ACCESS BARRIER -->
+    <div id="securityGate" class="gate-box">
+        <h3 style="color:#ea6060; margin-bottom:5px;">🔒 Cyber Gate Shield</h3>
+        <p style="font-size:11px; color:#8b949e; margin-bottom:20px;">Persistent Session Identity Core Check</p>
+        <input type="text" id="admId" placeholder="Master Key Administrator ID" class="inp-text">
+        <input type="password" id="admToken" placeholder="Security Token Passcode" class="inp-text">
+        <button class="btn-action" onclick="gateValidationRoutine()">Unlock Terminal</button>
     </div>
 
-    <!-- MAIN CORE SECURE GRID INTERFACE -->
-    <div id="adminGrid" class="dashboard-layout">
+    <!-- 👑 ADMIN TOTAL REMOTES CONTROL CORE GRID -->
+    <div id="adminLayout" class="grid-core">
         <div style="display:flex; flex-direction:column; gap:20px;">
-            <div class="box">
-                <h4 style="color:#9ca3af; font-size:12px; text-transform:uppercase; margin-bottom:12px;">👑 Register System Sub-Admin</h4>
-                <input type="text" id="newSubName" placeholder="Admin Nickname" class="input-field">
-                <input type="password" id="newSubPass" placeholder="Secret Key Token" class="input-field">
-                <button class="btn" style="background:#2563eb;" onclick="addSubAdmin()">Authorize Access Node</button>
+            <!-- Gift Code Creator Engine -->
+            <div class="panel-card">
+                <h4 style="color:#8b949e; font-size:11px; text-transform:uppercase; margin-bottom:12px;">🎫 Gift Code Promo Deployment</h4>
+                <input type="text" id="gName" placeholder="Promo Code (e.g. ZUNOO100)" class="inp-text">
+                <input type="number" id="gVal" placeholder="Wallet Cash Value (₹)" class="inp-text">
+                <button class="btn-action" style="background:#238636;" onclick="deployGiftCode()">Deploy Code</button>
             </div>
-            <div class="box">
-                <h4 style="color:#9ca3af; font-size:12px; text-transform:uppercase; margin-bottom:12px;">📡 Main Owner System Audit Notifications</h4>
-                <div id="notifyBox" style="font-size:11px; color:#9ca3af; line-height:1.6;">Awaiting secure loop stream setup...</div>
+            <div class="panel-card">
+                <h4 style="color:#8b949e; font-size:11px; text-transform:uppercase; margin-bottom:12px;">📡 Live Owner System Audit Stream</h4>
+                <div id="systemStream" style="font-size:11px; color:#8b949e; line-height:1.6; max-height:150px; overflow-y:auto;">Syncing node telemetry...</div>
             </div>
         </div>
 
-        <div class="box">
-            <h4 style="color:#9ca3af; font-size:12px; text-transform:uppercase; margin-bottom:15px;">💸 Multi-Admin User Balance Control Desk</h4>
-            <div style="margin-bottom:15px; display:flex; gap:10px;">
-                <input type="text" id="targetUser" placeholder="Target User Telegram Name" class="input-field" style="margin:0;">
-                <input type="number" id="targetAmt" placeholder="₹ Amount" class="input-field" style="margin:0; width:100px;">
-                <button class="btn" style="background:#22c55e; width:auto; padding:0 20px;" onclick="adjustBalance('credit')">Add</button>
-                <button class="btn" style="background:#d97706; width:auto; padding:0 20px;" onclick="adjustBalance('debit')">Debit</button>
+        <div style="display:flex; flex-direction:column; gap:20px;">
+            <!-- LIVE PAYMENT TRACKING COUNTERS -->
+            <div class="stat-card-row">
+                <div class="stat-mini-box">
+                    <p style="font-size:11px; color:#8b949e; text-transform:uppercase;">Total Payments Today</p>
+                    <h3 id="statTotalPayments" style="color:#facc15; font-size:22px; margin-top:5px;">0</h3>
+                </div>
+                <div class="stat-mini-box">
+                    <p style="font-size:11px; color:#8b949e; text-transform:uppercase;">Approved Payments</p>
+                    <h3 id="statApprovedPayments" style="color:#238636; font-size:22px; margin-top:5px;">0</h3>
+                </div>
+            </div>
+
+            <!-- ₹100 High Lottery Manual Controls -->
+            <div class="panel-card" style="border-color:#ea6060;">
+                <h4 style="color:#ea6060; font-size:11px; text-transform:uppercase; margin-bottom:12px;">🎯 High-Tier ₹100 Lottery Manual Winner Controller</h4>
+                <div style="display:flex; gap:10px;">
+                    <input type="text" id="winTargetUsr" placeholder="Target Telegram Username" class="inp-text" style="margin:0;">
+                    <button class="btn-action" style="background:#ef4444; width:auto; padding:0 25px;" onclick="rigHighLotteryWinner()">Set Winner</button>
+                </div>
+            </div>
+
+            <!-- User Wallet Control -->
+            <div class="panel-card">
+                <h4 style="color:#8b949e; font-size:11px; text-transform:uppercase; margin-bottom:15px;">💸 User Wallet Balance Grid Control</h4>
+                <div style="display:flex; gap:10px; margin-bottom:15px;">
+                    <input type="text" id="tUsr" placeholder="Target User Name" class="inp-text" style="margin:0;">
+                    <input type="number" id="tVal" placeholder="₹" class="inp-text" style="margin:0; width:90px;">
+                    <button class="btn-action" style="background:#238636; width:auto; padding:0 20px;" onclick="walletAdjust('credit')">Add</button>
+                    <button class="btn-action" style="background:#bd5c00; width:auto; padding:0 20px;" onclick="walletAdjust('debit')">Debit</button>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        let loggedAdmin = "";
-        async function verifyGate() {
-            const username = document.getElementById('admUser').value;
-            const password = document.getElementById('admPass').value;
+        if(localStorage.getItem('adminSessionActive') === "OWNERSHUBHAM11") {
+            document.getElementById('securityGate').style.display = 'none';
+            document.getElementById('adminLayout').style.display = 'grid';
+            loadSystemAuditStream();
+            syncAdminCounters();
+            setInterval(syncAdminCounters, 5000);
+        }
+
+        async function gateValidationRoutine() {
+            const username = document.getElementById('admId').value;
+            const password = document.getElementById('admToken').value;
             const res = await fetch('/api/admin/login', {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
+                headers: {'Content-Type':'application/json'},
                 body: JSON.stringify({ username, password })
             });
-            const data = await res.json();
-            if(data.success) {
-                loggedAdmin = username;
-                document.getElementById('lockGate').style.display = 'none';
-                document.getElementById('adminGrid').style.display = 'grid';
-                loadLogs();
-            } else { alert("ACCESS DENIED: Credentials Invalid."); }
+            const d = await res.json();
+            if(d.success) {
+                localStorage.setItem('adminSessionActive', username);
+                document.getElementById('securityGate').style.display = 'none';
+                document.getElementById('adminLayout').style.display = 'grid';
+                loadSystemAuditStream();
+                syncAdminCounters();
+                setInterval(syncAdminCounters, 5000);
+            } else { alert("ACCESS CRITICAL CRASH: Code Invalid."); }
         }
-        async function adjustBalance(action) {
-            const username = document.getElementById('targetUser').value;
-            const amount = document.getElementById('targetAmt').value;
-            if(!username || !amount) return alert("Saari fields bhariye!");
+
+        async function deployGiftCode() {
+            const codeName = document.getElementById('gName').value;
+            const amount = document.getElementById('gVal').value;
+            await fetch('/api/admin/create-gift', {
+                method: 'POST',
+                headers: {'Content-Type':'application/json'},
+                body: JSON.stringify({ codeName, amount })
+            });
+            alert(`Gift Promo ${codeName} online!`);
+            document.getElementById('gName').value=''; document.getElementById('gVal').value='';
+            loadSystemAuditStream();
+        }
+
+        async function rigHighLotteryWinner() {
+            const winnerUsername = document.getElementById('winTargetUsr').value;
+            const res = await fetch('/api/admin/set-high-winner', {
+                method: 'POST',
+                headers: {'Content-Type':'application/json'},
+                body: JSON.stringify({ winnerUsername })
+            });
+            alert(`@${winnerUsername} declared winner of 20 Gmail Accounts!`);
+            document.getElementById('winTargetUsr').value = '';
+            loadSystemAuditStream();
+        }
+
+        async function walletAdjust(action) {
+            const username = document.getElementById('tUsr').value;
+            const amount = document.getElementById('tVal').value;
             await fetch('/api/admin/update-balance', {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ username, amount, action, adminName: loggedAdmin })
+                headers: {'Content-Type':'application/json'},
+                body: JSON.stringify({ username, amount, action, adminName: localStorage.getItem('adminSessionActive') })
             });
-            alert("Database balance updated successfully!");
-            document.getElementById('targetUser').value=''; document.getElementById('targetAmt').value='';
-            loadLogs();
+            alert("Balance updated!");
+            document.getElementById('tUsr').value=''; document.getElementById('tVal').value='';
+            loadSystemAuditStream();
+            syncAdminCounters();
         }
-        async function addSubAdmin() {
-            const username = document.getElementById('newSubName').value;
-            const password = document.getElementById('newSubPass').value;
-            if(!username || !password) return alert("Admins fields empty!");
-            await fetch('/api/admin/add', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ username, password })
-            });
-            alert("Naya Admin Authorized Node register ho gaya!");
-            document.getElementById('newSubName').value=''; document.getElementById('newSubPass').value='';
-            loadLogs();
+
+        async function syncAdminCounters() {
+            const res = await fetch('/api/admin/stats');
+            const data = await res.json();
+            document.getElementById('statTotalPayments').innerText = data.totalPaymentsToday;
+            document.getElementById('statApprovedPayments').innerText = data.approvedPaymentsToday;
         }
-        async function loadLogs() {
+
+        async function loadSystemAuditStream() {
             const res = await fetch('/api/owner/notifications');
             const data = await res.json();
-            const box = document.getElementById('notifyBox');
-            if(data.length === 0) { box.innerHTML = "No active sub-admin activity logged."; return; }
-            box.innerHTML = data.map(l => `<div style="border-bottom:1px solid #1f2937; padding:4px 0;"><span style="color:#ef4444;">[${l.time}]</span> ${l.details}</div>`).join('');
+            const box = document.getElementById('systemStream');
+            if(data.length === 0) return;
+            box.innerHTML = data.map(l => `<div><span style="color:#ea6060;">[${l.time}]</span> ${l.details}</div>`).join('');
         }
     </script>
 </body>

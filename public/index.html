@@ -3,139 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zunoo SMM - Premium Panel</title>
+    <title>Zunoo SMM Pro - App Mode</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-        body { background: #0b0f19; color: #f1f5f9; min-height: 100vh; padding-bottom: 40px; }
-        .navbar { background: #111827; border-bottom: 2px solid #ef4444; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 0 20px rgba(239,68,68,0.2); }
-        .logo { font-size: 22px; font-weight: 900; tracking: 1px; color: #fff; }
-        .logo span { color: #ef4444; text-shadow: 0 0 10px rgba(239,68,68,0.5); }
-        .wallet-badge { background: #1f2937; border: 1px solid #22c55e; padding: 6px 14px; border-radius: 20px; font-size: 14px; color: #22c55e; font-weight: bold; }
-        .btn-add { background: #2563eb; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        .btn-add:hover { background: #1d4ed8; transform: scale(1.05); }
-        
-        .main-container { max-width: 1200px; margin: 40px auto; padding: 0 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-        @media (max-width: 768px) { .main-container { grid-template-columns: 1fr; } }
-        
-        .panel { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 25px; position: relative; }
-        .panel-title { font-size: 16px; font-weight: bold; margin-bottom: 20px; border-bottom: 1px solid #1f2937; padding-bottom: 10px; color: #f3f4f6; }
-        
-        .premium-banner { background: linear-gradient(135deg, #1e1b4b, #311042); border: 1px solid #c084fc; border-radius: 8px; padding: 15px; margin-bottom: 20px; text-align: center; }
-        .btn-premium { background: linear-gradient(90deg, #a855f7, #ec4899); color: white; border: none; padding: 8px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px; margin-top: 8px; }
-        
-        .form-group { margin-bottom: 15px; }
-        .form-label { display: block; font-size: 12px; color: #9ca3af; margin-bottom: 6px; text-transform: uppercase; font-weight: 600; }
-        .form-input { width: 100%; background: #1f2937; border: 1px solid #374151; border-radius: 6px; padding: 12px; color: white; font-size: 14px; outline: none; }
-        .form-input:focus { border-color: #ef4444; }
-        
-        .btn-submit { width: 100%; background: #ef4444; color: white; font-weight: bold; border: none; padding: 14px; border-radius: 6px; cursor: pointer; font-size: 15px; box-shadow: 0 4px 15px rgba(239,68,68,0.3); }
-        .inventory-box { background: #1f2937; border: 1px solid #374151; border-radius: 6px; padding: 15px; font-family: monospace; font-size: 13px; color: #38bdf8; height: 180px; overflow-y: auto; }
-        
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 999; backdrop-filter: blur(5px); }
+        * { box-sizing: border-box; margin:0; padding:0; font-family: 'Segoe UI', sans-serif; }
+        body { background: #060913; color: #f1f5f9; min-height: 100vh; padding-bottom: 90px; }
+        .tab-content { display: none; padding: 20px; max-width: 600px; margin: 0 auto; }
+        .tab-content.active { display: block; }
+        .panel { background: #0f172a; border: 1px solid #1e293b; border-radius: 14px; padding: 22px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
+        .panel-title { font-size: 15px; font-weight: bold; color: #e2e8f0; border-bottom: 1px solid #1e293b; padding-bottom: 10px; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #0f172a; border-top: 1px solid #1e293b; display: flex; justify-content: space-around; padding: 14px 0; z-index: 999; box-shadow: 0 -5px 20px rgba(0,0,0,0.5); }
+        .nav-item { color: #94a3b8; border: none; background: none; font-size: 11px; font-weight: bold; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .nav-item.active { color: #f43f5e; text-shadow: 0 0 10px rgba(244,63,94,0.3); }
+        .form-input { width: 100%; background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 12px; color: white; font-size: 14px; margin-top: 6px; outline: none; }
+        .form-input:focus { border-color: #f43f5e; }
+        .btn-submit { width: 100%; background: #f43f5e; color: white; font-weight: bold; border: none; padding: 14px; border-radius: 8px; cursor: pointer; margin-top: 15px; font-size: 14px; transition: 0.2s; }
+        .btn-submit:hover { background: #e11d48; }
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 9999; backdrop-filter: blur(8px); }
         .modal.active { display: flex; }
-        .modal-content { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 30px; max-width: 380px; width: 100%; text-align: center; position: relative; }
-        .modal-close { position: absolute; top: 10px; right: 15px; background: none; border: none; color: #9ca3af; font-size: 24px; cursor: pointer; }
+        .modal-card { background: #0f172a; border: 1px solid #1e293b; border-radius: 16px; padding: 30px; max-width: 380px; width: 100%; text-align: center; position: relative; }
+        .qr-wrapper { background: white; padding: 10px; display: inline-block; border-radius: 12px; margin: 15px 0; border: 2px solid #334155; }
+        .qr-frame-img { width: 160px; height: 160px; object-fit: contain; display: block; }
+        .timer-banner { background: #1e1b4b; color: #a855f7; border: 1px solid #6366f1; padding: 6px; border-radius: 20px; font-size: 13px; font-weight: bold; margin-bottom: 12px; }
     </style>
 </head>
 <body>
 
-    <div class="navbar">
-        <div class="logo">Zunoo <span>SMM Pro</span></div>
-        <div class="wallet-area" style="display:flex; align-items:center; gap:15px;">
-            <div class="wallet-badge">Balance: ₹0.00</div>
-            <button onclick="toggleModal('payModal', true)" class="btn-add">Add Funds</button>
-        </div>
-    </div>
-
-    <div class="main-container">
-        <!-- LEFT CONTROL: WORK PANEL & PREMIUM BOX -->
-        <div>
-            <div class="premium-banner">
-                <h4 style="color:#d8b4fe; font-size:14px;">👑 Upgrade To VIP Premium Look</h4>
-                <p style="font-size:11px; color:#9ca3af; margin-top:4px;">Charge: ₹30 Only. Benefit: Per Gmail Price Drops from ₹10 to <b style="color:#22c55e;">₹9/Gmail</b> + Ultra Fast Creation Server Network Active!</p>
-                <button class="btn-premium" onclick="buyPremium()">Buy Premium Mode</button>
+    <!-- 🏠 TAB 1: HOME -->
+    <div id="homeTab" class="tab-content active">
+        <div class="panel" style="background: linear-gradient(135deg, #1c1917, #450a0a); border-color: #ef4444;">
+            <h3 style="color:#f87171;">🔥 High-Tier Ultra Lottery (₹100/Ticket)</h3>
+            <p style="font-size:11px; color:#cbd5e1; margin-top:3px;">Inaam: <b>20 Premium Gmail Accounts!</b> [🔒 100% Admin Controlled]</p>
+            <div id="highLotteryStatus" style="font-size:12px; color:#facc15; font-weight:bold; margin:10px 0;">Total Tickets Bought: 0</div>
+            <div style="display:flex; justify-content:center; gap:10px; margin-bottom:12px;">
+                <input type="number" id="highTktCount" value="1" min="1" class="form-input" style="width:70px; margin:0; text-align:center;">
+                <button onclick="buyLottery('high')" class="btn-submit" style="margin:0; width:auto; padding:0 20px; background:#ef4444;">Buy ₹100 Tickets</button>
             </div>
-
-            <div class="panel">
-                <div class="panel-title">🚀 Launch Bulk Gmail Order</div>
-                <form onsubmit="event.preventDefault(); alert('Order Denied! Add funds to your wallet account.');">
-                    <div class="form-group">
-                        <label class="form-label">Telegram / WhatsApp Handle</label>
-                        <input type="text" placeholder="@username" class="form-input" id="uName" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Gmail Quantity</label>
-                        <select class="form-input" style="background:#1f2937;">
-                            <option>10 Gmail Accounts (Standard: ₹100 / VIP: ₹90)</option>
-                            <option>20 Gmail Accounts (Standard: ₹200 / VIP: ₹180)</option>
-                            <option>50 Gmail Accounts (Standard: ₹500 / VIP: ₹450)</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Common Master Password</label>
-                        <input type="password" placeholder="Define characters password" class="form-input" required>
-                    </div>
-                    <button type="submit" class="btn-submit">Initialize Machine Process</button>
-                </form>
+            <div style="background: rgba(0,0,0,0.3); border-radius:6px; padding:8px; font-size:11px; max-height:80px; overflow-y:auto;">
+                <b style="color:#ef4444;">🏆 ₹100 Winners Hall:</b>
+                <div id="highWinnersBox" style="color:#94a3b8; margin-top:4px;">No custom winners declared yet.</div>
             </div>
         </div>
 
-        <!-- RIGHT AUTOMATED TERMINAL LOGS -->
-        <div class="panel" style="display: flex; flex-direction: column; justify-content: space-between;">
-            <div>
-                <div class="panel-title">📬 Delivered Gmail Log Terminal</div>
-                <div class="inventory-box">
-                    [System idle. Database secure network connection online.]
-                </div>
+        <div class="panel" style="background: linear-gradient(135deg, #1e1b4b, #2e1065); border-color: #8b5cf6;">
+            <h3 style="color:#c084fc;">🔮 Standard Cyber Draw (₹31/Ticket)</h3>
+            <p style="font-size:11px; color:#94a3b8; margin-top:3px;">Prize: 10 Gmail Accounts | Minimum 5 entries required.</p>
+            <div id="stdLotteryStatus" style="font-size:12px; color:#22c55e; font-weight:bold; margin:10px 0;">Loading stats...</div>
+            <div style="display:flex; justify-content:center; gap:10px;">
+                <input type="number" id="stdTktCount" value="1" min="1" class="form-input" style="width:70px; margin:0; text-align:center;">
+                <button onclick="buyLottery('standard')" class="btn-submit" style="margin:0; width:auto; padding:0 20px; background:#8b5cf6;">Buy ₹31 Tickets</button>
             </div>
-            <button class="form-input" style="background:#374151; border:none; cursor:pointer; font-weight:bold;" onclick="alert('No accounts to extract.')">Download Bulk Database (.TXT)</button>
         </div>
-    </div>
 
-    <!-- 24/7 SUPPORT BAR -->
-    <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
         <div class="panel">
-            <div class="panel-title">💬 24/7 Gmail Creator Work Support Grid</div>
-            <div style="display:flex; gap:15px;">
-                <input type="text" placeholder="Fampay balance tracking issue? Message our sub-admins..." class="form-input" style="flex:1;">
-                <button class="btn-add" style="background:#ef4444;" onclick="alert('Ticket uploaded to admin queue!')">Submit Ticket</button>
+            <div class="panel-title">⚙️ Forge-Engine (Making a Gmail)</div>
+            <input type="text" id="userTelegramInput" placeholder="Enter Your Real Telegram Username" class="form-input">
+            <select class="form-input" style="background:#1e293b;">
+                <option>Bulk Production Mode (Min 10 Accounts - ₹10/Gmail)</option>
+                <option>Custom Single Mode (10 se kam - ₹10/Gmail)</option>
+            </select>
+            <input type="password" placeholder="Define Common Account Password" class="form-input">
+            <button class="btn-submit" onclick="alert('Order Queue Blocked: Low Wallet Credits. Go to Account Tab.')">Initialize Server Pipeline</button>
+        </div>
+    </div>
+
+    <!-- 📈 TAB 2: TRACKER -->
+    <div id="trackerTab" class="tab-content">
+        <div class="panel">
+            <div class="panel-title">📈 Live Server Monitoring Network</div>
+            <div style="background:#020617; border-radius:8px; padding:20px; font-family:monospace; font-size:12px; color:#10b981; line-height:1.6;">
+                [📶 Secure Proxy Pipeline: Active]<br>[🤖 Bot Creation Engine: Standby]<br>[⚡ Current Request Flow: No active processing orders.]
             </div>
         </div>
     </div>
 
-    <!-- POPUP MODAL QR DEPOSIT -->
-    <div id="payModal" class="modal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="toggleModal('payModal', false)">&times;</button>
-            <h3 style="margin-bottom:5px;">Secure Wallet Deposit</h3>
-            <p style="font-size:12px; color:#9ca3af;">Scan official QR code via FamPay App</p>
-            <div style="background:white; padding:8px; display:inline-block; border-radius:8px; margin:15px 0;">
-                <img src="my-qr.png" alt="QR Link" style="width:150px; height:150px; object-fit:contain; display:block;">
+    <!-- 📬 TAB 3: INVENTORY -->
+    <div id="inventoryTab" class="tab-content">
+        <div class="panel">
+            <div class="panel-title">📬 My Delivered Database</div>
+            <div style="background:#020617; border:1px solid #334155; border-radius:8px; padding:15px; font-family:monospace; font-size:13px; color:#38bdf8; height:220px; overflow-y:auto; margin-bottom:15px;">
+                // Database Empty.<br>Automated accounts will drop here after draw.
             </div>
-            <form onsubmit="event.preventDefault(); alert('UTR code transmitted to admin pipeline.'); toggleModal('payModal', false);">
-                <div class="form-group" style="text-align:left;">
-                    <label class="form-label">Exact Amount Transferred</label>
-                    <input type="number" placeholder="₹" class="form-input" required>
-                </div>
-                <div class="form-group" style="text-align:left;">
-                    <label class="form-label">12-Digit Ref UTR Number</label>
-                    <input type="text" maxlength="12" placeholder="Enter reference ID" class="form-input" required>
-                </div>
-                <button type="submit" class="btn-submit" style="background:#2563eb; box-shadow:none;">Submit to System Database</button>
+            <button class="btn-submit" style="background:#475569;" onclick="alert('No accounts list to pull.')">Download Bulk Database (.TXT)</button>
+        </div>
+    </div>
+
+    <!-- 👤 TAB 4: ACCOUNT -->
+    <div id="accountTab" class="tab-content">
+        <div class="panel" style="text-align:center;">
+            <p style="font-size:13px; color:#94a3b8;">Available Wallet Balance</p>
+            <h1 id="topWalletBalance" style="color:#22c55e; font-size:36px; margin:5px 0; font-weight:900;">₹0.00</h1>
+            <button onclick="openDepositBox()" class="btn-submit" style="background:#2563eb; width:auto; padding:8px 25px; margin:5px 0; font-size:13px;">Add Wallet Funds</button>
+            <div style="margin-top:20px; border-top:1px solid #1e293b; padding-top:15px; display:flex; gap:10px;">
+                <input type="text" id="gCodeInp" placeholder="Enter Secret Gift Code" class="form-input" style="margin:0;">
+                <button onclick="redeemGiftCode()" class="btn-submit" style="margin:0; width:auto; padding:0 15px; background:#10b981;">Redeem</button>
+            </div>
+        </div>
+        <div class="panel">
+            <div class="panel-title">💬 24/7 Multi-Admin Support</div>
+            <div style="display:flex; gap:10px;">
+                <input type="text" placeholder="UTR confirmation delays? Ask sub-admins..." class="form-input" style="margin:0;">
+                <button class="btn-submit" style="margin:0; width:auto; padding:0 20px; background:#475569;" onclick="alert('Support log transmitted!')">Submit Ticket</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAYMENT POPUP WITH TIMER -->
+    <div id="payGatewayModal" class="modal">
+        <div class="modal-content modal-card">
+            <button class="modal-close" onclick="closeDepositBox()">&times;</button>
+            <div id="countdownBox" class="timer-banner">⏱️ Secure session ends: 05:00</div>
+            <h4>Scan Official QR Frame</h4>
+            <div class="qr-wrapper"><img src="my-qr.png" alt="Official QR" class="qr-frame-img"></div>
+            <form onsubmit="sendUtrCode(event)">
+                <input type="number" id="payAmt" placeholder="Exact Cash Paid (₹)" class="form-input" required>
+                <input type="text" id="payUtr" maxlength="12" placeholder="12-Digit Reference UTR Number" class="form-input" required>
+                <button type="submit" class="btn-submit" style="background:#22c55e;">Submit Code Verification</button>
             </form>
         </div>
     </div>
 
+    <!-- BOTTOM FIXED NAV BAR -->
+    <div class="bottom-nav">
+        <button class="nav-item active" onclick="switchTab('homeTab', this)"><span>🏠</span>HOME</button>
+        <button class="nav-item" onclick="switchTab('trackerTab', this)"><span>📈</span>TRACKER</button>
+        <button class="nav-item" onclick="switchTab('inventoryTab', this)"><span>📬</span>INVENTORY</button>
+        <button class="nav-item" onclick="switchTab('accountTab', this)"><span>👤</span>ACCOUNT</button>
+    </div>
+
     <script>
-        function toggleModal(id, show) {
-            const m = document.getElementById(id);
-            if(show) m.classList.add('active'); else m.classList.remove('active');
-        }
-        async function buyPremium() {
-            const username = document.getElementById('uName').value;
-            if(!username) return alert("Pehle upar apna Telegram username dalein!");
-            alert("Processing request... Premium activation code running.");
-        }
-    </script>
-</body>
-</html>
+        let clientUser = localStorage.getItem('activeUser') || "ZunooUser_" + Math.floor(Math.random()*100);
+        localStorage.setItem('activeUser', clientUser);
+        let timerInterval;
+

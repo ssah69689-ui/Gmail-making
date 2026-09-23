@@ -5,114 +5,203 @@ const path = require('path');
 app.use(express.json());
 app.use(express.static('public'));
 
-// Secure Memory Database Arrays
+// 🔒 100% Clean Hardened Memory Database
 let users = [];
 let admins = [{ username: "OWNERSHUBHAM11", password: "8734812286", role: "Owner" }];
 let ownerLogs = [];
 let standardTickets = [];
 let highTickets = []; 
 let giftCodes = []; 
+let supportTickets = []; // Categorized ticketing database
 
-// Payment Counters for Admin Dashboard
+// Analytics Grid Telemetry Stats
 let stats = {
     totalPaymentsToday: 0,
-    approvedPaymentsToday: 0
+    approvedPaymentsToday: 0,
+    totalInvestedFund: 0,
+    todayOrdersCounter: 0
 };
 
-let standardHistory = { winner: null, status: "24 Hours Ticket Counter Active" };
+let standardHistory = { winner: null, status: "Subah 12:01 se Ticket Counter chalu hai!" };
 let highWinnerList = []; 
 
-// Admin Authenticator Check
+// 👑 Admin Core Authenticator Login
 app.post('/api/admin/login', (req, res) => {
     const { username, password } = req.body;
     const admin = admins.find(a => a.username === username && a.password === password);
     if (admin) return res.json({ success: true, role: admin.role });
-    res.status(401).json({ success: false, message: "Security Check Failed!" });
+    res.status(401).json({ success: false, message: "Cyber Shield Check: Access Critical Mismatch!" });
 });
 
-// Submit UTR Deposit Verification Request (User Side)
+// 👤 User Premium Registration (Mobile Number Login Validation Core)
+app.post('/api/user/register', (req, res) => {
+    const { name, username, password } = req.body;
+    let existing = users.find(u => u.username === username);
+    if (existing) return res.json({ success: false, message: "Galti: Yeh mobile number pehle se register hai!" });
+    
+    users.push({ 
+        name, 
+        username, // Target Mobile Number acts as unique Login ID
+        password, 
+        balance: 0, 
+        isPremium: false,
+        registeredAt: new Date().toLocaleDateString()
+    });
+    res.json({ success: true, message: "Registration successful! Ab login box mein jao." });
+});
+
+// 👤 User Secure Authorization Login
+app.post('/api/user/login', (req, res) => {
+    const { username, password } = req.body;
+    let user = users.find(u => u.username === username && u.password === password);
+    if (user) return res.json({ success: true, username: user.username, name: user.name });
+    res.json({ success: false, message: "Mobile Number ya Password galat hai! Dubara check karein." });
+});
+
+// 📥 UTR Secure Cash Deposit Queue Handler
 app.post('/api/user/submit-utr', (req, res) => {
     const { username, amount, utr } = req.body;
-    stats.totalPaymentsToday += 1; // Increment total payments counter
+    stats.totalPaymentsToday += 1;
     ownerLogs.unshift({
         action: "DEPOSIT_REQUEST",
-        details: `User '@${username}' submitted UTR: ${utr} for ₹${amount}. Verification pending.`,
+        details: `User '${username}' submitted UTR: ${utr} for ₹${amount}. Checking pending.`,
         time: new Date().toLocaleTimeString()
     });
-    res.json({ success: true, message: "UTR successfully submitted to admin queue!" });
+    res.json({ success: true, message: "UTR Grid Transmitted! Sub-Admins verify kar rahe hain." });
 });
 
-// Create Gift Code Generator (Admin)
+// 👑 Add Sub-Admin Authority Terminal (Owner Only Command)
+app.post('/api/admin/add-sub', (req, res) => {
+    const { username, password } = req.body;
+    let check = admins.find(a => a.username === username);
+    if(check) return res.json({ success: false, message: "Yeh sub-admin pehle se authorized hai!" });
+    
+    admins.push({ username, password, role: "Sub-Admin" });
+    ownerLogs.unshift({ action: "NEW_SUB_ADMIN", details: `Naya Sub-Admin Node '${username}' register ho gaya!`, time: new Date().toLocaleTimeString() });
+    res.json({ success: true, message: "Naya Sub-Admin successfully add ho gaya!" });
+});
+
+// 💸 Remote Wallet Adjuster Matrix (Add Balance / Debit Management)
+app.post('/api/admin/update-balance', (req, res) => {
+    const { username, amount, action, adminName } = req.body;
+    let user = users.find(u => u.username === username);
+    if (!user) return res.json({ success: false, message: "Database Error: User nahi mila!" });
+    
+    let cash = parseFloat(amount);
+    if (action === 'credit') {
+        user.balance += cash;
+        stats.approvedPaymentsToday += 1;
+        stats.totalInvestedFund += cash;
+    } else if (action === 'debit') {
+        user.balance = Math.max(0, user.balance - cash);
+    }
+    
+    ownerLogs.unshift({ action: action.toUpperCase(), details: `Admin '${adminName}' ${action}ed ₹${amount} for user '${username}'`, time: new Date().toLocaleTimeString() });
+    res.json({ success: true, message: "Database wallet synchronized!" });
+});
+
+// 🔒 Remote User Password Reset Override Tool (Owner Core Feature)
+app.post('/api/admin/reset-password', (req, res) => {
+    const { username, newPassword, adminName } = req.body;
+    let user = users.find(u => u.username === username);
+    if (!user) return res.json({ success: false, message: "Error: Is mobile number se koi user nahi mila!" });
+    
+    user.password = newPassword;
+    ownerLogs.unshift({ action: "MASTER_PASSWORD_RESET", details: `Admin '${adminName}' changed password for user '${username}'`, time: new Date().toLocaleTimeString() });
+    res.json({ success: true, message: `Success: User ka naya password lock ho gaya!` });
+});
+
+// 🎫 Create Promo Gift Codes Generator (Admin Interface Link)
 app.post('/api/admin/create-gift', (req, res) => {
     const { codeName, amount } = req.body;
     giftCodes.push({ code: codeName.toUpperCase(), amount: parseFloat(amount), usedBy: [] });
-    res.json({ success: true, message: `Gift Code ${codeName} of ₹${amount} deployed!` });
+    res.json({ success: true, message: `Gift Promo Node ${codeName} online!` });
 });
 
-// Redeem Gift Code (User)
+// 🎁 Redeem Gift Code Pipeline (User Dashboard Link)
 app.post('/api/user/redeem-gift', (req, res) => {
     const { username, code } = req.body;
-    let targetCode = giftCodes.find(g => g.code === code.toUpperCase());
-    if(!targetCode) return res.json({ success: false, message: "Invalid Gift Code!" });
-    if(targetCode.usedBy.includes(username)) return res.json({ success: false, message: "Code Already Redeemed!" });
+    let target = giftCodes.find(g => g.code === code.toUpperCase());
+    if(!target) return res.json({ success: false, message: "Galti: Yeh Gift Code galat hai!" });
+    if(target.usedBy.includes(username)) return res.json({ success: false, message: "Aap pehle hi yeh code use kar chuke ho!" });
     
     let user = users.find(u => u.username === username);
-    if (!user) { user = { username, balance: 0, telegram: "@"+username, isPremium: false }; users.push(user); }
+    if(!user) return res.json({ success: false, message: "User session dead!" });
     
-    user.balance += targetCode.amount;
-    targetCode.usedBy.push(username);
-    res.json({ success: true, message: `Success! ₹${targetCode.amount} credited to wallet.` });
+    user.balance += target.amount;
+    target.usedBy.push(username);
+    res.json({ success: true, message: `Success! ₹${target.amount} aapke account mein add ho gaye.` });
 });
 
-// Buy Lottery API
+// 🎫 Buy Lottery Processing Endpoint
 app.post('/api/lottery/buy', (req, res) => {
     const { username, count, tier } = req.body;
     let user = users.find(u => u.username === username);
-    if (!user) { user = { username, balance: 0, telegram: "@"+username, isPremium: false }; users.push(user); }
+    if (!user) return res.json({ success: false, message: "Session login dead!" });
     
-    let ticketPrice = tier === 'high' ? 100 : 31;
-    let totalCost = ticketPrice * parseInt(count);
+    let price = tier === 'high' ? 100 : 31;
+    let cost = price * parseInt(count);
+    if (user.balance < cost) return res.json({ success: false, message: "Wallet balance kam hai! Pehle recharge karein." });
     
-    if (user.balance < totalCost) return res.json({ success: false, message: "Recharge your account wallet code!" });
-    
-    user.balance -= totalCost;
+    user.balance -= cost;
     for(let i=0; i<count; i++) {
-        let tktObj = { username, ticketId: "TK-" + Math.floor(1000 + Math.random() * 9000) };
-        if (tier === 'high') highTickets.push(tktObj);
-        else standardTickets.push(tktObj);
+        let tkt = { username, ticketId: "TK-" + Math.floor(1000 + Math.random() * 9000) };
+        if (tier === 'high') highTickets.push(tkt);
+        else standardTickets.push(tkt);
     }
-    res.json({ success: true, message: `${count} ticket(s) added successfully to pool.` });
+    res.json({ success: true, message: `Mubarak ho! ${count} ticket successfully pool mein lag gaye.` });
 });
 
-// Manual High Tier Winner Rigging API (Owner Power)
+// 🎯 Manual High Tier Winner Rigging Core API (Owner Exclusive Control)
 app.post('/api/admin/set-high-winner', (req, res) => {
     const { winnerUsername } = req.body;
     highWinnerList.unshift({ username: winnerUsername, prize: "20 Premium Gmail Accounts", time: new Date().toLocaleTimeString() });
     
-    ownerLogs.unshift({ action: "HIGH_LOTTERY_MANUAL", details: `Owner manually chose @${winnerUsername} as 20 Gmail Winner!`, time: new Date().toLocaleTimeString() });
-    highTickets = []; 
-    res.json({ success: true, message: `@${winnerUsername} proclaimed as official high lottery winner!` });
+    ownerLogs.unshift({ action: "LOTTERY_HIGH_RIGGED", details: `Owner manually proclaimed @${winnerUsername} as 20 Gmail Winner!`, time: new Date().toLocaleTimeString() });
+    highTickets = []; // Flush pool for clean reset
+    res.json({ success: true, message: `Database Lock: @${winnerUsername} official high winner ban gaya!` });
 });
 
-// Balance Update API (With Approved Payments Tracking)
-app.post('/api/admin/update-balance', (req, res) => {
-    const { username, amount, action, adminName } = req.body;
-    let user = users.find(u => u.username === username);
-    if (!user) { user = { username, balance: 0, telegram: "@" + username, isPremium: false }; users.push(user); }
-    
-    if (action === 'credit') {
-        user.balance += parseFloat(amount);
-        stats.approvedPaymentsToday += 1; // Increment approved payments counter
-    }
-    if (action === 'debit') {
-        user.balance = Math.max(0, user.balance - parseFloat(amount));
-    }
-    
-    ownerLogs.unshift({ action: action.toUpperCase(), details: `Admin '${adminName}' ${action}ed ₹${amount} for user '${username}'`, time: new Date().toLocaleTimeString() });
-    res.json({ success: true });
+// 💬 Customer Support Ticket Creation Framework (User Form Link)
+app.post('/api/user/create-ticket', (req, res) => {
+    const { username, category, description } = req.body;
+    let ticketId = "TKT-" + Math.floor(1000 + Math.random() * 9000);
+    supportTickets.unshift({
+        id: ticketId,
+        username, // User mobile identity string
+        category,
+        description,
+        reply: "Awaiting review from Gmail Maker SMM sub-admins...",
+        status: "Process Query"
+    });
+    res.json({ success: true, message: "Problem Form transmitted! Live verification status pending." });
 });
 
-// Automatic Standard Draw (Checks every night 10:00 PM)
+// 💬 Customer Support Chat Reply Dispatch Terminal (Admin Side)
+app.post('/api/admin/reply-ticket', (req, res) => {
+    const { ticketId, replyMsg } = req.body;
+    let ticket = supportTickets.find(t => t.id === ticketId);
+    if(ticket) {
+        ticket.reply = replyMsg;
+        res.json({ success: true, message: "Response successfully dispatched!" });
+    } else {
+        res.json({ success: false, message: "Ticket ID invalid!" });
+    }
+});
+
+// ✅ Ticket Success Resolution Dynamic Lock API (Drawing Closing Rule)
+app.post('/api/admin/resolve-ticket', (req, res) => {
+    const { ticketId } = req.body;
+    let ticket = supportTickets.find(t => t.id === ticketId);
+    if(ticket) {
+        ticket.status = "My All Doubts"; // Shifts category automatically
+        res.json({ success: true, message: "Ticket resolution completed! Chat permanently closed." });
+    } else {
+        res.json({ success: false, message: "Target node failed." });
+    }
+});
+
+// ⏱️ Auto-Loop Engine for Night 10:00 PM Standard Draw Check
 setInterval(() => {
     let now = new Date();
     let istTime = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
@@ -120,21 +209,20 @@ setInterval(() => {
         if (standardTickets.length >= 5) {
             let winIdx = Math.floor(Math.random() * standardTickets.length);
             let winTkt = standardTickets[winIdx];
-            standardHistory = { winner: winTkt.username, status: `🎉 Winner: @${winTkt.username} won 10 Gmails!` };
+            standardHistory = { winner: winTkt.username, status: `🎉 Live Draw: @${winTkt.username} automatic 10 Gmail won!` };
         } else {
             standardTickets.forEach(t => { let u = users.find(usr => usr.username === t.username); if(u) u.balance += 31; });
-            standardHistory = { winner: "REFUNDED", status: "Low entries (<5). Standard draw funds returned to wallets." };
+            standardHistory = { winner: "REFUNDED", status: "Anti-Loss Triggered: Low entries (<5). Wallet cash refunded!" };
         }
         standardTickets = [];
-        // Reset daily metrics at midnight/draw check if required, else keeps rolling
     }
 }, 60000);
 
-// Global Information Stream APIs
-app.get('/api/admin/stats', (req, res) => res.json(stats));
+// Global Intercept System Data Stream Routers
+app.get('/api/admin/stats', (req, res) => res.json({ ...stats, usersCount: users.length, vipCount: users.filter(u=>u.isPremium).length }));
 app.get('/api/lottery/status', (req, res) => res.json({ standard: standardHistory, highWinners: highWinnerList, stdCount: standardTickets.length, highCount: highTickets.length, highPool: highTickets }));
 app.get('/api/users', (req, res) => res.json(users));
+app.get('/api/tickets/all', (req, res) => res.json(supportTickets));
 app.get('/api/owner/notifications', (req, res) => res.json(ownerLogs));
 
-app.listen(3000, () => console.log('Zunoo SMM Pro Server Dynamic Engine active'));
-
+app.listen(3000, () => console.log('Gmail Maker SMM Core Engine Active'));

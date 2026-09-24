@@ -149,7 +149,6 @@
             <button class="nav-item" onclick="switchTab('admSupportTab', this)"><span>⚠️</span>Users Problem</button>
         </div>
     </div>
-
     <script>
         let masterSession = localStorage.getItem('adminSessionActive');
         if(masterSession === "OWNERSHUBHAM11") { showAdminCoreGrid(); }
@@ -172,7 +171,7 @@
         async function deployGiftCode() {
             const codeName = document.getElementById('gName').value; const amount = document.getElementById('gVal').value;
             await fetch('/api/admin/create-gift', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ codeName, amount }) });
-            alert(`Promo ${codeName} online!`); document.getElementById('gName').value=''; document.getElementById('gVal').value=''; syncAdminCounters();
+            alert("Promo " + codeName + " online!"); document.getElementById('gName').value=''; document.getElementById('gVal').value=''; syncAdminCounters();
         }
 
         async function addSubAdminNode() {
@@ -184,7 +183,7 @@
         async function rigHighLotteryWinner() {
             const winnerUsername = document.getElementById('winTargetUsr').value;
             await fetch('/api/admin/set-high-winner', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ winnerUsername }) });
-            alert(`@${winnerUsername} won 20 Gmails!`); document.getElementById('winTargetUsr').value = ''; syncAdminCounters();
+            alert("@" + winnerUsername + " won 20 Gmails!"); document.getElementById('winTargetUsr').value = ''; syncAdminCounters();
         }
 
         async function walletAdjust(action) {
@@ -195,7 +194,7 @@
 
         async function handleAdminPaymentAction(paymentId, action) {
             await fetch('/api/admin/verify-payment', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ paymentId, action, adminName: localStorage.getItem('adminSessionActive') }) });
-            alert(`Payment request [${action.toUpperCase()}] status processed!`); syncAdminCounters();
+            alert("Status processed!"); syncAdminCounters();
         }
 
         async function dispatchReply(tId, inputId) { let msg = document.getElementById(inputId).value; await fetch('/api/admin/reply-ticket', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ ticketId: tId, replyMsg: msg }) }); alert("Reply dispatched!"); syncAdminCounters(); }
@@ -205,16 +204,42 @@
             if(localStorage.getItem('adminSessionActive') !== "OWNERSHUBHAM11") return;
             const res = await fetch('/api/admin/stats'); const s = await res.json();
             document.getElementById('dashTotalUsers').innerText = s.usersCount; 
-            document.getElementById('dashTotalEarnings').innerText = `₹${s.totalInvestedFund.toFixed(2)}`;
+            document.getElementById('dashTotalEarnings').innerText = "₹" + s.totalInvestedFund.toFixed(2);
             document.getElementById('dashVipUsers').innerText = s.vipCount; 
-            document.getElementById('dashTotalGmailOrders').innerText = `${s.totalGmailOrdersCount} Gmails Ordered`;
+            document.getElementById('dashTotalGmailOrders').innerText = s.totalGmailOrdersCount + " Gmails Ordered";
             document.getElementById('dashTotalTickets').innerText = s.usersCount ? s.usersCount * 2 : 0;
 
             const nRes = await fetch('/api/owner/notifications'); const n = await nRes.json();
-            if(n.length > 0) document.getElementById('systemStream').innerHTML = n.map(o => `<div><span style="color:#ef4444;">[${o.time}]</span> ${o.details}</div>`).join('');
+            if(n.length > 0) document.getElementById('systemStream').innerHTML = n.map(o => "<div><span style='color:#ef4444;'>[" + o.time + "]</span> " + o.details + "</div>").join('');
             
-            // 💳 Sync Live Pending Payments Queue with Success / Reject buttons
             const pRes = await fetch('/api/admin/pending-payments'); const pData = await pRes.json();
             let pGrid = document.getElementById('adminPendingPaymentsGrid');
-            if(pData.length === 0) { pGrid.innerHTML = `<p style="font-size:11px; color:#8b949e; font-style:italic;">No pending deposit requests in queue.</p>`; }
-else { pGrid.innerHTML = pData.map(p => <div style="background:#161b22; padding:10px; border-radius:6px; border:1px solid #ef4444; font-size:12px;"><b>📱 Mobile: ${p.username}</b> | Amount: <b style="color:#22c55e;">₹${p.amount}</b><br>UTR: <span style="color:#facc15;">${p.utr}</span><div style="display:flex; gap:10px; margin-top:8px;"><button onclick="handleAdminPaymentAction('${p.id}', 'success')" style="flex:1; background:#238636; border:none; color:white; padding:5px; border-radius:4px; font-weight:bold; cursor:pointer;">Success ✅</button><button onclick="handleAdminPaymentAction('${p.id}', 'reject')" style="flex:1; background:#da3637; border:none; color:white; padding:5px; border-radius:4px; font-weight:bold; cursor:pointer;">Reject ❌</button></div></div>).join(''); }// Sync 5वाँ नया डिब्बा Gmail orders live data listconst oRes = await fetch('/api/admin/gmail-orders'); const oData = await oRes.json();let oBox = document.getElementById('adminGmailOrdersList');if(oData.length === 0) { oBox.innerHTML = Syncing delivery orders vault... List khali hai.; }else { oBox.innerHTML = oData.map(o => <div>[ID: ${o.id}] User: ${o.username} - Mode: ${o.mode} - Status: <b>${o.status}</b></div>).join(''); }// Sync Active Support Tickets with inline responseconst tRes = await fetch('/api/tickets/all'); const tData = await tRes.json();let activeTkts = tData.filter(t => t.status === "Process Query"); let grid = document.getElementById('adminTicketsGrid');if(activeTkts.length === 0) { grid.innerHTML = <p style="font-size:11px; color:#8b949e; font-style:italic;">No user queries active.</p>; return; }grid.innerHTML = activeTkts.map((t, idx) => <div style="background:#161b22; border:1px solid #ef4444; padding:15px; border-radius:8px; font-size:12px; color:#c9d1d9; margin-bottom:10px;"> <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><b>📱 Mobile: ${t.username}</b><b style="color:#facc15;">[${t.category}]</b></div> <p style="color:#8b949e; margin-bottom:10px;">Problem: "${t.description}"</p> <div style="display:flex; gap:10px; align-items:center;"> <input type="text" id="repInp_${idx}" placeholder="Type reply..." value="${t.reply.includes('Awaiting review') ? '' : t.reply}" style="flex:1; background:#010409; border:1px solid #30363d; padding:8px; color:#10b981; border-radius:4px; outline:none;"> <button onclick="dispatchReply('${t.id}', 'repInp_${idx}')" style="background:#3b82f6; border:none; padding:8px 12px; color:white; font-weight:bold; border-radius:4px; cursor:pointer;">Reply</button> <button onclick="resolveTicketSuccess('${t.id}')" style="background:#238636; border:none; padding:8px 12px; color:white; font-weight:bold; border-radius:4px; cursor:pointer;">Success ✅</button> </div> </div>).join('');}
+            if(pData.length === 0) { pGrid.innerHTML = "<p style='font-size:11px; color:#8b949e; font-style:italic;'>No pending deposit requests in queue.</p>"; }
+            else { pGrid.innerHTML = pData.map(p => "<div style='background:#161b22; padding:10px; border-radius:6px; border:1px solid #ef4444; font-size:12px;'><b>📱 Mobile: " + p.username + "</b> | Amount: <b style='color:#22c55e;'>₹" + p.amount + "</b><br>UTR: <span style='color:#facc15;'>" + p.utr + "</span><div style='display:flex; gap:10px; margin-top:8px;'><button onclick=\"handleAdminPaymentAction('" + p.id + "', 'success')\" style='flex:1; background:#238636; border:none; color:white; padding:5px; border-radius:4px; font-weight:bold; cursor:pointer;'>Success ✅</button><button onclick=\"handleAdminPaymentAction('" + p.id + "', 'reject')\" style='flex:1; background:#da3637; border:none; color:white; padding:5px; border-radius:4px; font-weight:bold; cursor:pointer;'>Reject ❌</button></div></div>").join(''); }
+
+            const oRes = await fetch('/api/admin/gmail-orders'); const oData = await oRes.json();
+            let oBox = document.getElementById('adminGmailOrdersList');
+            if(oData.length === 0) { oBox.innerHTML = "Syncing delivery orders vault... List khali hai."; }
+            else { oBox.innerHTML = oData.map(o => "<div>[ID: " + o.id + "] User: " + o.username + " - Mode: " + o.mode + " - Status: <b>" + o.status + "</b></div>").join(''); }
+
+            const tRes = await fetch('/api/tickets/all'); const tData = await tRes.json();
+            let activeTkts = tData.filter(t => t.status === "Process Query"); let grid = document.getElementById('adminTicketsGrid');
+            if(activeTkts.length === 0) { grid.innerHTML = "<p style='font-size:11px; color:#8b949e; font-style:italic;'>No user queries active.</p>"; return; }
+            
+            let htmlStr = "";
+            for(let i=0; i<activeTkts.length; i++) {
+                let t = activeTkts[i];
+                htmlStr += "<div style='background:#161b22; border:1px solid #ef4444; padding:15px; border-radius:8px; font-size:12px; color:#c9d1d9; margin-bottom:10px;'>";
+                htmlStr += "<div style='display:flex; justify-content:space-between; margin-bottom:6px;'><b>📱 Mobile: " + t.username + "</b><b style='color:#facc15;'>[" + t.category + "]</b></div>";
+                htmlStr += "<p style='color:#8b949e; margin-bottom:10px;'>Problem: \"" + t.description + "\"</p>";
+                htmlStr += "<div style='display:flex; gap:10px; align-items:center;'>";
+                htmlStr += "<input type='text' id='repInp_" + i + "' placeholder='Type reply...' value='" + (t.reply.includes('Awaiting review') ? '' : t.reply) + "' style='flex:1; background:#010409; border:1px solid #30363d; padding:8px; color:#10b981; border-radius:4px; outline:none;'>";
+                htmlStr += "<button onclick=\"dispatchReply('" + t.id + "', 'repInp_" + i + "')\" style='background:#3b82f6; border:none; padding:8px 12px; color:white; font-weight:bold; border-radius:4px; cursor:pointer;'>Reply</button>";
+                htmlStr += "<button onclick=\"resolveTicketSuccess('" + t.id + "')\" style='background:#238636; border:none; padding:8px 12px; color:white; font-weight:bold; border-radius:4px; cursor:pointer;'>Success ✅</button>";
+                htmlStr += "</div></div>";
+            }
+            grid.innerHTML = htmlStr;
+        }
+    </script>
+</body>
+</html>

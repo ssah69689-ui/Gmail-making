@@ -6,11 +6,11 @@
     <title>Gmail Maker SMM</title>
     <style>
         * { box-sizing: border-box; margin:0; padding:0; font-family: 'Segoe UI', sans-serif; }
-        body { background: #04060d; color: #f1f5f9; min-height: 100vh; padding-bottom: 90px; }
+        body { background: #070913; color: #f1f5f9; min-height: 100vh; padding-bottom: 90px; }
         
-        /* 🔐 ULTRA PREMIUM BLACK DARK AUTH UI */
+        /* 🔐 ULTRA PREMIUM BLACK DARK AUTH UI (SHREEWIN TIER LOOK) */
         .auth-container { max-width: 380px; margin: 60px auto; padding: 20px; }
-        .auth-box { background: #090d16; border: 2px solid #ef4444; border-radius: 16px; padding: 25px; box-shadow: 0 0 25px rgba(239,68,68,0.2); text-align: center; }
+        .auth-box { background: #0c1020; border: 2px solid #ef4444; border-radius: 16px; padding: 25px; box-shadow: 0 0 25px rgba(239,68,68,0.2); text-align: center; }
         .brand-title { font-size: 24px; font-weight: 900; color: #fff; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; }
         .brand-title span { color: #ef4444; text-shadow: 0 0 10px rgba(239,68,68,0.5); }
         .form-input { width: 100%; background: #111827; border: 1px solid #1f2937; border-radius: 8px; padding: 12px; color: white; font-size: 14px; margin-top: 8px; outline: none; }
@@ -19,19 +19,19 @@
         .btn-submit:hover { background: #dc2626; }
         .btn-support-time { background: #1e1b4b; border: 1px solid #6366f1; color: #a855f7; font-size: 11px; font-weight: bold; padding: 10px; border-radius: 8px; cursor: pointer; margin-top: 10px; width: 100%; }
 
-        /* 📱 MAIN RUNTIME DASHBOARD LAYOUT */
+        /* 📱 MAIN RUNTIME DASHBOARD APP INTERFACES */
         #appContainer { display: none; }
         .tab-content { display: none; padding: 20px; max-width: 600px; margin: 0 auto; }
         .tab-content.active { display: block; }
-        .panel { background: #090d16; border: 1px solid #1f2937; border-radius: 14px; padding: 20px; margin-bottom: 22px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .panel { background: #0c1020; border: 1px solid #1f2937; border-radius: 14px; padding: 20px; margin-bottom: 22px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
         .panel-title { font-size: 14px; font-weight: bold; color: #e2e8f0; border-bottom: 1px solid #1f2937; padding-bottom: 8px; margin-bottom: 15px; text-transform: uppercase; }
         
-        /* 📱 6 BUTTONS BOTTOM NAV BAR */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #090d16; border-top: 1px solid #1f2937; display: flex; justify-content: space-around; padding: 12px 0; z-index: 999; box-shadow: 0 -5px 20px rgba(0,0,0,0.6); }
+        /* 📱 6 PERMANENT BUTTONS BOTTOM NAV BAR FIX */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #0c1020; border-top: 1px solid #1f2937; display: flex; justify-content: space-around; padding: 12px 0; z-index: 999; box-shadow: 0 -5px 20px rgba(0,0,0,0.6); }
         .nav-item { color: #94a3b8; border: none; background: none; font-size: 10px; font-weight: bold; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
-        .nav-item.active { color: #ef4444; text-shadow: 0 0 10px rgba(239,68,68,0.3); }
+        .nav-item.active { color: #facc15; text-shadow: 0 0 10px rgba(250,204,21,0.3); }
         
-        /* Chat Categories & Mode UI */
+        /* Dynamic Toggle Switches & Categories */
         .support-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
         .btn-cat { background: #111827; border: 1px solid #1f2937; color: #94a3b8; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 12px; cursor: pointer; }
         .btn-cat.active { border-color: #ef4444; color: #ef4444; background: rgba(239,68,68,0.05); }
@@ -39,29 +39,33 @@
         .btn-mode { flex: 1; background: #111827; border: 1px solid #1f2937; color: white; padding: 10px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 13px; }
         .btn-mode.active { border-color: #ef4444; background: rgba(239,68,68,0.1); color: #ef4444; }
 
-        /* ShreeWin Style Profile Layout elements */
-        .shree-profile-card { background: linear-gradient(135deg, #1e1b4b, #0f172a); border-radius: 16px; padding: 20px; display: flex; align-items: center; gap: 15px; margin-bottom: 20px; border: 1px solid #312e81; }
-        .shree-avatar { width: 60px; height: 60px; border-radius: 50%; border: 2px solid #facc15; object-fit: cover; }
-        .shree-vip-badge { background: #facc15; color: #000; font-size: 10px; font-weight: 900; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; margin-left: 5px; }
-        .shree-wallet-box { background: #0f172a; border: 1px solid #ef4444; box-shadow: 0 0 15px rgba(239,68,68,0.1); border-radius: 12px; padding: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .shree-action-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; text-align: center; }
-        .shree-action-item { background: #111827; border: 1px solid #1f2937; padding: 10px; border-radius: 10px; cursor: pointer; font-size: 11px; font-weight: bold; color: #cbd5e1; }
+        /* 🔥 DYNAMIC REAL SHREEWIN MATCH VISUAL STYLE CARDS (WITHDRAWAL FLUSHED) */
+        .shree-profile-card { background: linear-gradient(135deg, #251b4b, #0c1020); border-radius: 16px; padding: 20px; display: flex; align-items: center; gap: 15px; margin-bottom: 20px; border: 1px solid #3c2a85; }
+        .shree-vip-badge { background: linear-gradient(90deg, #eae59b, #facc15); color: #000; font-size: 10px; font-weight: 900; padding: 2px 7px; border-radius: 4px; text-transform: uppercase; margin-left: 5px; box-shadow: 0 0 8px rgba(250,204,21,0.4); }
+        .shree-wallet-box { background: linear-gradient(180deg, #161b35, #0c1020); border: 1px solid #2d386b; box-shadow: 0 4px 15px rgba(0,0,0,0.4); border-radius: 12px; padding: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         
-        /* Modals & Timer Viewports */
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 9999; backdrop-filter: blur(8px); }
+        .shree-action-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; text-align: center; }
+        .shree-action-item { background: #131930; border: 1px solid #232d54; padding: 12px; border-radius: 10px; cursor: pointer; font-size: 11px; font-weight: bold; color: #cbd5e1; transition: 0.2s; }
+        .shree-action-item:hover { border-color: #ef4444; }
+        
+        /* Modals & Clean Timers UI viewports */
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 9999; backdrop-filter: blur(8px); }
         .modal.active { display: flex; }
-        .modal-card { background: #090d16; border: 1px solid #1f2937; border-radius: 16px; padding: 25px; max-width: 380px; width: 100%; text-align: center; position: relative; }
-        .qr-wrapper { background: white; padding: 8px; display: inline-block; border-radius: 12px; margin: 12px 0; }
-        .qr-frame-img { width: 150px; height: 150px; object-fit: contain; display: block; }
+        .modal-card { background: #0c1020; border: 2px solid #ef4444; border-radius: 16px; padding: 25px; max-width: 380px; width: 100%; text-align: center; position: relative; box-shadow: 0 0 30px rgba(239,68,68,0.3); }
+        
+        /* 📋 NEW EXCLUSIVE COPYABLE UPI ID ROW GRID DESIGN */
+        .copy-upi-row { background: #070913; border: 1px dashed #10b981; border-radius: 8px; padding: 12px; margin: 15px 0; display: flex; justify-content: space-between; align-items: center; }
+        .btn-copy-id { background: #10b981; color: white; border: none; padding: 6px 12px; font-size: 11px; font-weight: bold; border-radius: 4px; cursor: pointer; }
+        
         .timer-banner { background: #1e1b4b; color: #a855f7; border: 1px solid #6366f1; padding: 6px; border-radius: 20px; font-size: 12px; font-weight: bold; margin-bottom: 10px; }
         .tg-channel-card { background: linear-gradient(90deg, #1d2a4a, #17253f); border: 1px solid #38bdf8; border-radius: 10px; padding: 15px; display: flex; align-items: center; justify-content: center; gap: 12px; text-decoration: none; margin-top: 15px; }
     </style>
 </head>
 <body>
 
-    <!-- 🔐 LOGIN / REGISTER PAGE (FRONT GATE) -->
+    <!-- 🔐 MOBILE LOGIN CONTAINER STACK SCREEN -->
     <div id="authContainer" class="auth-container">
-        <!-- Login Form Box -->
+        <!-- Login Card Layout -->
         <div id="loginBox" class="auth-box">
             <div class="brand-title">Gmail Maker <span>SMM</span></div>
             <form onsubmit="handleUserLogin(event)">
@@ -73,7 +77,7 @@
             </form>
         </div>
 
-        <!-- Register Form Box -->
+        <!-- Register Card Layout -->
         <div id="registerBox" class="auth-box" style="display:none;">
             <div class="brand-title">Gmail Maker <span>SMM</span></div>
             <h4 style="font-size:13px; color:#94a3b8; margin-bottom:10px;">Create New Account</h4>
@@ -222,15 +226,15 @@
             </div>
         </div>
 
-        <!-- 👤 TAB 6: ACCOUNT (💥 SHREEWIN 100% MATCH UI LAYOUT) -->
+        <!-- 👤 TAB 6: ACCOUNT (💥 NEW SHREEWIN 100% MATCH - WITHDRAWAL REMOVED) -->
         <div id="accountTab" class="tab-content">
-            <!-- 👤 VIP Profile Header Panel -->
+            <!-- 👑 VIP Profile Header Panel -->
             <div class="shree-profile-card">
                 <div style="background:#374151; border-radius:50%; width:60px; height:60px; display:flex; align-items:center; justify-content:center; border:2px solid #facc15; font-size:24px;">👤</div>
                 <div>
                     <b id="shreeProfileName" style="font-size:16px; color:#fff; display:block;">MEMBERNNGMT913 <span class="shree-vip-badge">VIP 0</span></b>
                     <span id="shreeProfileUid" style="font-size:12px; color:#facc15; display:block; margin-top:2px;">UID | 1268412</span>
-                    <span style="font-size:10px; color:#94a3b8; display:block; margin-top:2px;">Last login: 2026-09-24 05:52:29</span>
+                    <span style="font-size:10px; color:#94a3b8; display:block; margin-top:2px;">Last login: 2026-09-24 06:34:00</span>
                 </div>
             </div>
 
@@ -243,22 +247,33 @@
                 <button onclick="openDepositBox()" style="background:#2563eb; color:white; border:none; padding:8px 16px; border-radius:20px; font-size:12px; font-weight:bold; cursor:pointer;">Enter wallet</button>
             </div>
 
-            <!-- 📊 4 Quick Action Matrix Icons Row -->
-            <div class="shree-action-grid">
-                <div class="shree-action-item" onclick="alert('Wallet active nodes protected.')"><span style="display:block; font-size:18px; margin-bottom:4px;">💳</span>ARWallet</div>
+            <!-- 📊 3 Quick Action Matrix Icons Row (Withdrawal Flushed!) -->
+            <div class="shree-action-grid-3">
+                <div class="shree-action-item" onclick="alert('Wallet active nodes protected.')"><span style="display:block; font-size:18px; margin-bottom:4px;">💳</span>Wallet</div>
                 <div class="shree-action-item" onclick="openDepositBox()"><span style="display:block; font-size:18px; margin-bottom:4px;">🪙</span>Deposit</div>
-                <div class="shree-action-item" onclick="alert('Minimum withdrawal ₹100 restriction locked!')"><span style="display:block; font-size:18px; margin-bottom:4px;">💸</span>Withdraw</div>
                 <div class="shree-action-item" onclick="alert('VIP 1 Premium features activation cost is ₹70!')"><span style="display:block; font-size:18px; margin-bottom:4px;">👑</span>VIP</div>
+            </div>
+
+            <!-- 📜 2 VIP History Cards (Withdraw History Flushed!) -->
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:20px;">
+                <div class="shree-action-item" style="text-align:left; padding:15px;" onclick="switchTab('inventoryTab', document.querySelectorAll('.bottom-nav .nav-item')[4])">
+                    <b style="color:#fff; font-size:12px; display:block;">🔹 Game History</b>
+                    <span style="color:#94a3b8; font-size:10px; margin-top:2px; display:block;">My game history</span>
+                </div>
+                <div class="shree-action-item" style="text-align:left; padding:15px;" onclick="alert('No deposit logs inside storage nodes yet.')">
+                    <b style="color:#fff; font-size:12px; display:block;">📝 Deposit History</b>
+                    <span style="color:#94a3b8; font-size:10px; margin-top:2px; display:block;">My deposit history</span>
+                </div>
             </div>
 
             <!-- 📂 Settings Options Lists Rows -->
             <div class="panel" style="padding:10px 15px; margin-bottom:15px; display:flex; flex-direction:column; gap:12px;">
-                <div style="display:flex; justify-content:space-between; font-size:13px; cursor:pointer; padding-bottom:8px; border-bottom:1px solid #1f2937;" onclick="alert('No new vouchers generated.')"><span>🎁 Gifts & Promos</span><span>&gt;</span></div>
+                <div style="display:flex; justify-content:space-between; font-size:13px; color:#cbd5e1;"><span>📢 Notification</span><span style="background:#ef4444; color:white; font-size:10px; padding:2px 6px; border-radius:50%; font-weight:bold;">2</span></div>
                 <div style="display:flex; justify-content:space-between; font-size:13px; cursor:pointer; padding-bottom:8px; border-bottom:1px solid #1f2937;">
                     <input type="text" id="gCodeInp" placeholder="Enter Promo Secret Code" class="form-input" style="margin:0; padding:6px; font-size:11px; width:70%;">
                     <button onclick="redeemGiftCode()" style="background:#10b981; border:none; padding:4px 10px; border-radius:4px; font-weight:bold; color:white; font-size:11px;">Redeem</button>
                 </div>
-                <div style="display:flex; justify-content:space-between; font-size:13px;"><span>🌐 System Language</span><span style="color:#94a3b8;">English &gt;</span></div>
+                <div style="display:flex; justify-content:space-between; font-size:13px; color:#cbd5e1;"><span>🌐 Language</span><span style="color:#94a3b8;">English &gt;</span></div>
             </div>
             <button class="btn-submit" style="background:#374151; margin-top:5px;" onclick="logOutUserAccount()">🚪 Log Out Account</button>
         </div>
@@ -274,14 +289,20 @@
         </div>
     </div>
 
-    <!-- 💳 5-MINUTE LIVE DEPOSIT QR MODAL HUB -->
+    <!-- 💳 5-MINUTE LIVE DEPOSIT MODAL HUB (💥 100% NEW UPI COPY ID SYSTEM) -->
     <div id="payGatewayModal" class="modal">
         <div class="modal-content modal-card">
             <button onclick="closeDepositBox()" style="position:absolute; top:12px; right:18px; background:none; border:none; color:white; font-size:24px; cursor:pointer;">&times;</button>
             <div id="countdownBox" class="timer-banner">⏱️ Secure session ends: 05:00</div>
-            <h4>Scan Official QR Frame</h4>
-            <p style="font-size:11px; color:#94a3b8; margin-top:2px;">Bina UPI leak karein direct wallet add karein (Min ₹50)</p>
-            <div class="qr-wrapper"><img src="my-qr.png" alt="Official QR" class="qr-frame-img"></div>
+            <h4 style="color:#fff; font-size:15px;">Copy Official UPI ID</h4>
+            <p style="font-size:11px; color:#94a3b8; margin-top:4px;">Bina QR error ke direct copy karke payment karein (Min ₹50)</p>
+            
+            <!-- 📋 Clean Clipboard Copy Interface row box -->
+            <div class="copy-upi-row">
+                <span id="targetUpiString" style="color:#10b981; font-weight:bold; font-family:monospace; font-size:14px;">shubham77sah@fam</span>
+                <button type="button" class="btn-copy-id" onclick="copyOfficialUpiIdToClipboard()">Copy ID</button>
+            </div>
+
             <form onsubmit="sendUtrCode(event)">
                 <input type="number" id="payAmt" placeholder="Exact Cash Paid (Min ₹50)" class="form-input" required>
                 <input type="text" id="payUtr" maxlength="12" placeholder="12-Digit Reference UTR Number" class="form-input" required>
@@ -303,14 +324,17 @@
         
         async function handleUserRegister(e) {
             e.preventDefault();
-            let name = document.getElementById('regName').value; let username = document.getElementById('regPhone').value; let password = document.getElementById('regPass').value;
+            let name = document.getElementById('regName').value; 
+            let username = document.getElementById('regPhone').value; 
+            let password = document.getElementById('regPass').value;
             const res = await fetch('/api/user/register', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ name, username, password }) });
             let d = await res.json(); alert(d.message); if(d.success) showAuthScreen('login');
         }
         
         async function handleUserLogin(e) {
             e.preventDefault();
-            let username = document.getElementById('logPhone').value; let password = document.getElementById('logPass').value;
+            let username = document.getElementById('logPhone').value; 
+            let password = document.getElementById('logPass').value;
             const res = await fetch('/api/user/login', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ username, password }) });
             let d = await res.json(); 
             if(d.success) { localStorage.setItem('ZunooLoggedInUser', d.username); activeUser = d.username; showDashboardView(); } 
@@ -321,7 +345,7 @@
             document.getElementById('authContainer').style.display = 'none'; 
             document.getElementById('appContainer').style.display = 'block'; 
             document.getElementById('refLinkUrl').value = window.location.origin + "/ref=" + activeUser;
-            document.getElementById('shreeProfileName').innerHTML = activeUser + ` <span class="shree-vip-badge">VIP 0</span>`;
+            document.getElementById('shreeProfileName').innerHTML = activeUser + ' <span class="shree-vip-badge">VIP 0</span>';
             document.getElementById('shreeProfileUid').innerText = "UID | " + activeUser.substring(activeUser.length - 6);
             syncLotteryArena(); setInterval(syncLotteryArena, 5000); 
         }
@@ -331,7 +355,8 @@
         function switchTab(tId, b) { 
             document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active')); 
             document.querySelectorAll('.nav-item').forEach(btn=>btn.classList.remove('active')); 
-            document.getElementById(tId).classList.add('active'); b.classList.add('active'); 
+            document.getElementById(tId).classList.add('active'); 
+            if(b && b.classList) b.classList.add('active'); 
         }
 
         function toggleGmailMakerMode(mode) {
@@ -359,7 +384,16 @@
             const res = await fetch('/api/user/order-gmail', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
             let d = await res.json(); alert(d.message); syncLotteryArena();
         }
-                function openDepositBox() { document.getElementById('payGatewayModal').classList.add('active'); startTimer(300); }
+
+        function copyOfficialUpiIdToClipboard() {
+            let upiStr = document.getElementById('targetUpiString').innerText;
+            navigator.clipboard.writeText(upiStr).then(() => {
+                alert("UPI ID Copied Successfully: " + upiStr);
+            }).catch(() => {
+                alert("Copy failed! Aap manually copy kar lein: " + upiStr);
+            });
+        }
+        function openDepositBox() { document.getElementById('payGatewayModal').classList.add('active'); startTimer(300); }
         function closeDepositBox() { document.getElementById('payGatewayModal').classList.remove('active'); clearInterval(timerInterval); }
         
         function startTimer(duration) {
@@ -403,7 +437,7 @@
         
         async function syncLotteryArena() {
             if(!activeUser) return; const res = await fetch('/api/lottery/status'); const d = await res.json(); 
-            document.getElementById('stdLotteryStatus').innerText = "Pool: " + d.stdCount + " Tickets | Status: " + d.standard.status;
+            document.getElementById('stdLotteryStatus').innerText = "Pool: " + d.stdCount + " Tickets";
             document.getElementById('highLotteryStatus').innerText = "Total Tickets Bought: " + d.highCount;
             const uRes = await fetch('/api/users'); const uData = await uRes.json(); let me = uData.find(u => u.username === activeUser); if(me) document.getElementById('topWalletBalance').innerText = "₹" + me.balance.toFixed(2);
             if(d.highWinners.length > 0) { document.getElementById('highWinnersBox').innerHTML = d.highWinners.map(w => "<div>🏆 @" + w.username + " won " + w.prize + "</div>").join(''); }

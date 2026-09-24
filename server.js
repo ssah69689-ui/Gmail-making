@@ -5,7 +5,7 @@ const path = require('path');
 app.use(express.json());
 app.use(express.static('public'));
 
-// 🔒 100% CLEAN HARDENED MEMORY DATABASE (LIFETIME TOTAL LOCK SYSTEM)
+// 🔒 CLEAN DATABASE ARRAY SYSTEM (WITHDRAWAL COMPLETELY REMOVED)
 let users = [];
 let admins = [{ username: "OWNERSHUBHAM11", password: "8734812286", role: "Owner" }];
 let ownerLogs = [];
@@ -14,15 +14,15 @@ let highTickets = [];
 let giftCodes = []; 
 let supportTickets = []; 
 
-// 📦 5वाँ नया डिब्बा: Master Gmail Orders Database Array
+// 📦 5वाँ नया डिब्बा: Master Gmail Bulk/Single Orders Database Array
 let gmailOrders = []; 
-// 💳 UTR Pending Processing Queue Storage Container
+// 💳 UTR Pending Processing Verification Storage Container
 let pendingPayments = []; 
 
 // 📊 TOTAL LIFETIME TELEMETRY METERS (TODAY SYSTEM REMOVED AS PER SKETCH)
 let stats = {
     totalInvestedFund: 0,    // My All Network (कुल आज तक की लाइफटाइम कमाई का मीटर)
-    totalPaymentsToday: 0,   // UTR Submissions Queue Counter
+    totalPaymentsToday: 0,   // Live UTR Submissions Counter
     approvedPaymentsToday: 0 // Successfully Confirmed Credits Counter
 };
 
@@ -34,7 +34,7 @@ app.post('/api/admin/login', (req, res) => {
     const { username, password } = req.body;
     const admin = admins.find(a => a.username === username && a.password === password);
     if (admin) return res.json({ success: true, role: admin.role });
-    res.status(401).json({ success: false, message: "Cyber Shield Check: Access Critical Mismatch!" });
+    res.status(401).json({ success: false, message: "Access Mismatch!" });
 });
 // 👤 User Premium Registration (Mobile Number Login Validation Core)
 app.post('/api/user/register', (req, res) => {
@@ -100,47 +100,7 @@ app.post('/api/admin/add-sub', (req, res) => {
     res.json({ success: true, message: "Naya Sub-Admin successfully add ho gaya!" });
 });
 
-// 💳 NEW PAYMENT ACTION INTERFACE: ADMIN SUCCESS BUTTON (APPROVE PAYMENTS)
-app.post('/api/admin/payment-success', (req, res) => {
-    const { paymentId, adminName } = req.body;
-    let payRequest = pendingPayments.find(p => p.id === paymentId);
-    if (!payRequest) return res.json({ success: false, message: "Error: Payment ID nahi mili!" });
-    if (payRequest.status !== "Pending") return res.json({ success: false, message: "Yeh request pehle hi execute ho chuki hai!" });
-
-    let user = users.find(u => u.username === payRequest.username);
-    if (!user) return res.json({ success: false, message: "Database Error: User nahi mila!" });
-
-    // Execute Credit & Lifetime Telemetry Update
-    user.balance += payRequest.amount;
-    payRequest.status = "Success";
-    stats.approvedPaymentsToday += 1;
-    stats.totalInvestedFund += payRequest.amount; // Adds directly into "My All Network" lifetime meter
-
-    ownerLogs.unshift({ 
-        action: "PAYMENT_SUCCESS", 
-        details: `Admin '${adminName}' approved UTR: ${payRequest.utr} (₹${payRequest.amount}) for user '${payRequest.username}'`, 
-        time: new Date().toLocaleTimeString() 
-    });
-    res.json({ success: true, message: "Payment approved successfully! Balance credited." });
-});
-
-// ❌ NEW PAYMENT ACTION INTERFACE: ADMIN REJECT BUTTON (DELETE FRAUD UTR)
-app.post('/api/admin/payment-reject', (req, res) => {
-    const { paymentId, adminName } = req.body;
-    let payRequest = pendingPayments.find(p => p.id === paymentId);
-    if (!payRequest) return res.json({ success: false, message: "Error: Payment ID nahi mili!" });
-    if (payRequest.status !== "Pending") return res.json({ success: false, message: "Yeh request pehle hi execute ho chuki hai!" });
-
-    payRequest.status = "Rejected";
-    ownerLogs.unshift({ 
-        action: "PAYMENT_REJECTED", 
-        details: `Admin '${adminName}' rejected/cancelled fake UTR: ${payRequest.utr} for user '${payRequest.username}'`, 
-        time: new Date().toLocaleTimeString() 
-    });
-    res.json({ success: true, message: "Fake payment request rejected and deleted from queue!" });
-});
-
-// 💸 Remote Manual Wallet Adjuster Matrix (Add Balance / Debit Management)
+// 💸 Remote Wallet Adjuster Matrix (Manual Management Add/Debit Balance)
 app.post('/api/admin/update-balance', (req, res) => {
     const { username, amount, action, adminName } = req.body;
     let user = users.find(u => u.username === username);
@@ -155,14 +115,38 @@ app.post('/api/admin/update-balance', (req, res) => {
         user.balance = Math.max(0, user.balance - cash);
     }
     
-    ownerLogs.unshift({ action: action.toUpperCase(), details: `Admin '${adminName}' manually ${action}ed ₹${amount} for user '${username}'`, time: new Date().toLocaleTimeString() });
+    ownerLogs.unshift({ action: action.toUpperCase(), details: `Admin '${adminName}' ${action}ed ₹${amount} for user '${username}'`, time: new Date().toLocaleTimeString() });
     res.json({ success: true, message: "Database wallet synchronized!" });
+});
+
+// 💳 LIVE PENDING UTR CONTROL MATRIX (Success / Reject Core Action Framework)
+app.post('/api/admin/verify-payment', (req, res) => {
+    const { paymentId, action, adminName } = req.body;
+    let payIndex = pendingPayments.findIndex(p => p.id === paymentId);
+    if (payIndex === -1) return res.json({ success: false, message: "Request ID invalid!" });
+    
+    let targetPayment = pendingPayments[payIndex];
+    let user = users.find(u => u.username === targetPayment.username);
+    
+    if (action === 'success') {
+        if (user) {
+            user.balance += targetPayment.amount;
+            stats.totalInvestedFund += targetPayment.amount; // Live lifetime अर्निंग addition
+            stats.approvedPaymentsToday += 1;
+        }
+        ownerLogs.unshift({ action: "PAYMENT_APPROVED", details: `Admin '${adminName}' approved ₹${targetPayment.amount} for user ${targetPayment.username}`, time: new Date().toLocaleTimeString() });
+    } else if (action === 'reject') {
+        ownerLogs.unshift({ action: "PAYMENT_REJECTED", details: `Admin '${adminName}' rejected fraudulent UTR ${targetPayment.utr} from ${targetPayment.username}`, time: new Date().toLocaleTimeString() });
+    }
+    
+    pendingPayments.splice(payIndex, 1); // Flush from active processing layout lists
+    res.json({ success: true, message: `Action [${action.toUpperCase()}] locked into memory stack!` });
 });
 // 📦 UNIQUE GMAIL AUTOMATIC MACHINE LOGIC ENGINE (Single Mode & Bulk Mode Router)
 app.post('/api/user/order-gmail', (req, res) => {
     const { username, mode, password, name, dob, preferredAddress, bulkUsernamesList } = req.body;
     let user = users.find(u => u.username === username);
-    if (!user) return res.json({ success: false, message: "Session Dead! Login dubara karein." });
+    if (!user) return res.json({ success: false, message: "Session Dead! Login edubara karein." });
 
     let orderId = "ORD-" + Math.floor(10000 + Math.random() * 90000);
     

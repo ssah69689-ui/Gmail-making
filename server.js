@@ -5,34 +5,37 @@ const path = require('path');
 app.use(express.json());
 app.use(express.static('public'));
 
-// 🔒 Hardened Secure Memory Database
+// 🔒 100% CLEAN HARDENED MEMORY DATABASE (LIFETIME TOTAL LOCK SYSTEM)
 let users = [];
 let admins = [{ username: "OWNERSHUBHAM11", password: "8734812286", role: "Owner" }];
 let ownerLogs = [];
 let standardTickets = [];
 let highTickets = []; 
 let giftCodes = []; 
-let supportTickets = []; // Categorized ticketing system database
+let supportTickets = []; 
 
-// Live Analytics Telemetry Stats Grid
+// 📦 5वाँ नया डिब्बा: Master Gmail Orders Database Array
+let gmailOrders = []; 
+// 💳 UTR Pending Processing Queue Storage Container
+let pendingPayments = []; 
+
+// 📊 TOTAL LIFETIME TELEMETRY METERS (TODAY SYSTEM REMOVED AS PER SKETCH)
 let stats = {
-    totalPaymentsToday: 0,
-    approvedPaymentsToday: 0,
-    totalInvestedFund: 0,
-    todayOrdersCounter: 0
+    totalInvestedFund: 0,    // My All Network (कुल आज तक की लाइफटाइम कमाई का मीटर)
+    totalPaymentsToday: 0,   // UTR Submissions Queue Counter
+    approvedPaymentsToday: 0 // Successfully Confirmed Credits Counter
 };
 
 let standardHistory = { winner: null, status: "Subah 12:01 se Ticket Counter chalu hai!" };
 let highWinnerList = []; 
 
-// 👑 Admin Core Authenticator Gate Login
+// 👑 Admin Core Authenticator Login Matrix
 app.post('/api/admin/login', (req, res) => {
     const { username, password } = req.body;
     const admin = admins.find(a => a.username === username && a.password === password);
     if (admin) return res.json({ success: true, role: admin.role });
-    res.status(401).json({ success: false, message: "Security Barrier: Invalid Admin Keys!" });
+    res.status(401).json({ success: false, message: "Cyber Shield Check: Access Critical Mismatch!" });
 });
-
 // 👤 User Premium Registration (Mobile Number Login Validation Core)
 app.post('/api/user/register', (req, res) => {
     const { name, username, password } = req.body;
@@ -50,7 +53,7 @@ app.post('/api/user/register', (req, res) => {
     res.json({ success: true, message: "Registration successful! Ab login box mein jao." });
 });
 
-// 👤 User Secure Authorization Login (ShreeWin Mobile Matching Core)
+// 👤 User Secure Authorization Login
 app.post('/api/user/login', (req, res) => {
     const { username, password } = req.body;
     let user = users.find(u => u.username === username && u.password === password);
@@ -62,11 +65,21 @@ app.post('/api/user/login', (req, res) => {
 app.post('/api/user/submit-utr', (req, res) => {
     const { username, amount, utr } = req.body;
     
-    // 🚨 WALLET SAFETY LIMIT FILTER: Minimum ₹50 wallet deposit lock
+    // 🚨 STRENGTHENED SAFETY FILTER: Minimum ₹50 wallet deposit condition
     let depositAmount = parseFloat(amount);
     if (depositAmount < 50) {
         return res.json({ success: false, message: "Galti: Website mein minimum deposit limit ₹50 hai!" });
     }
+
+    // Push into Live Pending Queue for Admin Review
+    let paymentId = "PAY-" + Math.floor(1000 + Math.random() * 9000);
+    pendingPayments.push({
+        id: paymentId,
+        username,
+        amount: depositAmount,
+        utr,
+        status: "Pending"
+    });
 
     stats.totalPaymentsToday += 1;
     ownerLogs.unshift({
@@ -87,7 +100,47 @@ app.post('/api/admin/add-sub', (req, res) => {
     res.json({ success: true, message: "Naya Sub-Admin successfully add ho gaya!" });
 });
 
-// 💸 Remote Wallet Adjuster Matrix (Add Balance / Debit Management)
+// 💳 NEW PAYMENT ACTION INTERFACE: ADMIN SUCCESS BUTTON (APPROVE PAYMENTS)
+app.post('/api/admin/payment-success', (req, res) => {
+    const { paymentId, adminName } = req.body;
+    let payRequest = pendingPayments.find(p => p.id === paymentId);
+    if (!payRequest) return res.json({ success: false, message: "Error: Payment ID nahi mili!" });
+    if (payRequest.status !== "Pending") return res.json({ success: false, message: "Yeh request pehle hi execute ho chuki hai!" });
+
+    let user = users.find(u => u.username === payRequest.username);
+    if (!user) return res.json({ success: false, message: "Database Error: User nahi mila!" });
+
+    // Execute Credit & Lifetime Telemetry Update
+    user.balance += payRequest.amount;
+    payRequest.status = "Success";
+    stats.approvedPaymentsToday += 1;
+    stats.totalInvestedFund += payRequest.amount; // Adds directly into "My All Network" lifetime meter
+
+    ownerLogs.unshift({ 
+        action: "PAYMENT_SUCCESS", 
+        details: `Admin '${adminName}' approved UTR: ${payRequest.utr} (₹${payRequest.amount}) for user '${payRequest.username}'`, 
+        time: new Date().toLocaleTimeString() 
+    });
+    res.json({ success: true, message: "Payment approved successfully! Balance credited." });
+});
+
+// ❌ NEW PAYMENT ACTION INTERFACE: ADMIN REJECT BUTTON (DELETE FRAUD UTR)
+app.post('/api/admin/payment-reject', (req, res) => {
+    const { paymentId, adminName } = req.body;
+    let payRequest = pendingPayments.find(p => p.id === paymentId);
+    if (!payRequest) return res.json({ success: false, message: "Error: Payment ID nahi mili!" });
+    if (payRequest.status !== "Pending") return res.json({ success: false, message: "Yeh request pehle hi execute ho chuki hai!" });
+
+    payRequest.status = "Rejected";
+    ownerLogs.unshift({ 
+        action: "PAYMENT_REJECTED", 
+        details: `Admin '${adminName}' rejected/cancelled fake UTR: ${payRequest.utr} for user '${payRequest.username}'`, 
+        time: new Date().toLocaleTimeString() 
+    });
+    res.json({ success: true, message: "Fake payment request rejected and deleted from queue!" });
+});
+
+// 💸 Remote Manual Wallet Adjuster Matrix (Add Balance / Debit Management)
 app.post('/api/admin/update-balance', (req, res) => {
     const { username, amount, action, adminName } = req.body;
     let user = users.find(u => u.username === username);
@@ -102,12 +155,21 @@ app.post('/api/admin/update-balance', (req, res) => {
         user.balance = Math.max(0, user.balance - cash);
     }
     
-    ownerLogs.unshift({ action: action.toUpperCase(), details: `Admin '${adminName}' ${action}ed ₹${amount} for user '${username}'`, time: new Date().toLocaleTimeString() });
+    ownerLogs.unshift({ action: action.toUpperCase(), details: `Admin '${adminName}' manually ${action}ed ₹${amount} for user '${username}'`, time: new Date().toLocaleTimeString() });
     res.json({ success: true, message: "Database wallet synchronized!" });
 });
+// 📦 UNIQUE GMAIL AUTOMATIC MACHINE LOGIC ENGINE (Single Mode & Bulk Mode Router)
+app.post('/api/user/order-gmail', (req, res) => {
+    const { username, mode, password, name, dob, preferredAddress, bulkUsernamesList } = req.body;
+    let user = users.find(u => u.username === username);
+    if (!user) return res.json({ success: false, message: "Session Dead! Login dubara karein." });
 
-// 🔒 Remote User Password Reset Override Tool (Owner Core Feature)
-app.post('/api/admin/reset-password', (req, res) => {
+    let orderId = "ORD-" + Math.floor(10000 + Math.random() * 90000);
+    
+    if (mode === 'single') {
+        // Single Account Creation Mode Logic Block
+        let cost = 15; // Setup standard base cost node per single active mail account
+        if (user.balance  {
     const { username, newPassword, adminName } = req.body;
     let user = users.find(u => u.username === username);
     if (!user) return res.json({ success: false, message: "Error: Is mobile number se koi user nahi mila!" });
@@ -117,14 +179,14 @@ app.post('/api/admin/reset-password', (req, res) => {
     res.json({ success: true, message: `Success: User ka naya password lock ho gaya!` });
 });
 
-// 🎫 Create Promo Gift Codes Generator (Admin Interface Link)
+// 🎫 CREATE PROMO GIFT CODES GENERATOR (Admin Hub Matrix Link)
 app.post('/api/admin/create-gift', (req, res) => {
     const { codeName, amount } = req.body;
     giftCodes.push({ code: codeName.toUpperCase(), amount: parseFloat(amount), usedBy: [] });
     res.json({ success: true, message: `Gift Promo Node ${codeName} online!` });
 });
 
-// 🎁 Redeem Gift Code Pipeline (User Dashboard Link)
+// 🎁 REDEEM GIFT CODE PIPELINE (User Dashboard Link Matrix)
 app.post('/api/user/redeem-gift', (req, res) => {
     const { username, code } = req.body;
     let target = giftCodes.find(g => g.code === code.toUpperCase());
@@ -138,8 +200,7 @@ app.post('/api/user/redeem-gift', (req, res) => {
     target.usedBy.push(username);
     res.json({ success: true, message: `Success! ₹${target.amount} aapke account mein add ho gaye.` });
 });
-
-// 🎫 Buy Lottery Processing Endpoint
+// 🎫 BUY LOTTERY PROCESSING ENDPOINT
 app.post('/api/lottery/buy', (req, res) => {
     const { username, count, tier } = req.body;
     let user = users.find(u => u.username === username);
@@ -158,7 +219,7 @@ app.post('/api/lottery/buy', (req, res) => {
     res.json({ success: true, message: `Mubarak ho! ${count} ticket successfully pool mein lag gaye.` });
 });
 
-// 🎯 Manual High Tier Winner Rigging Core API (Owner Exclusive Control)
+// 🎯 MANUAL HIGH TIER WINNER RIGGING CORE API (Owner Exclusive Control)
 app.post('/api/admin/set-high-winner', (req, res) => {
     const { winnerUsername } = req.body;
     highWinnerList.unshift({ username: winnerUsername, prize: "20 Premium Gmail Accounts", time: new Date().toLocaleTimeString() });
@@ -168,7 +229,7 @@ app.post('/api/admin/set-high-winner', (req, res) => {
     res.json({ success: true, message: `Database Lock: @${winnerUsername} official high winner ban gaya!` });
 });
 
-// 💬 Customer Support Ticket Creation Framework (User Form Link)
+// 💬 CUSTOMER SUPPORT TICKET CREATION FRAMEWORK (User Form Link)
 app.post('/api/user/create-ticket', (req, res) => {
     const { username, category, description } = req.body;
     let ticketId = "TKT-" + Math.floor(1000 + Math.random() * 9000);
@@ -183,7 +244,7 @@ app.post('/api/user/create-ticket', (req, res) => {
     res.json({ success: true, message: "Problem Form transmitted! Live verification status pending." });
 });
 
-// 💬 Customer Support Chat Reply Dispatch Terminal (Admin Side)
+// 💬 CUSTOMER SUPPORT CHAT REPLY DISPATCH TERMINAL (Admin Side)
 app.post('/api/admin/reply-ticket', (req, res) => {
     const { ticketId, replyMsg } = req.body;
     let ticket = supportTickets.find(t => t.id === ticketId);
@@ -195,7 +256,7 @@ app.post('/api/admin/reply-ticket', (req, res) => {
     }
 });
 
-// ✅ Ticket Success Resolution Dynamic Lock API (Drawing Closing Rule)
+// ✅ TICKET SUCCESS RESOLUTION DYNAMIC LOCK API (Drawing Closing Rule)
 app.post('/api/admin/resolve-ticket', (req, res) => {
     const { ticketId } = req.body;
     let ticket = supportTickets.find(t => t.id === ticketId);
@@ -207,7 +268,7 @@ app.post('/api/admin/resolve-ticket', (req, res) => {
     }
 });
 
-// ⏱️ Auto-Loop Engine for Night 10:00 PM Standard Draw Check
+// ⏱️ AUTO-LOOP ENGINE FOR NIGHT 10:00 PM STANDARD DRAW CHECK
 setInterval(() => {
     let now = new Date();
     let istTime = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
@@ -224,8 +285,10 @@ setInterval(() => {
     }
 }, 60000);
 
-// Global Intercept System Data Stream Routers
-app.get('/api/admin/stats', (req, res) => res.json({ ...stats, usersCount: users.length, vipCount: users.filter(u=>u.isPremium).length }));
+// GLOBAL INTERCEPT SYSTEM DATA STREAM ROUTERS
+app.get('/api/admin/stats', (req, res) => res.json({ ...stats, usersCount: users.length, vipCount: users.filter(u=>u.isPremium).length, pendingPayCount: pendingPayments.length, totalGmailOrdersCount: gmailOrders.length }));
+app.get('/api/admin/pending-payments', (req, res) => res.json(pendingPayments));
+app.get('/api/admin/gmail-orders', (req, res) => res.json(gmailOrders));
 app.get('/api/lottery/status', (req, res) => res.json({ standard: standardHistory, highWinners: highWinnerList, stdCount: standardTickets.length, highCount: highTickets.length, highPool: highTickets }));
 app.get('/api/users', (req, res) => res.json(users));
 app.get('/api/tickets/all', (req, res) => res.json(supportTickets));

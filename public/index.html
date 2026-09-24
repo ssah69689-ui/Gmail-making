@@ -359,7 +359,7 @@
             const res = await fetch('/api/user/order-gmail', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
             let d = await res.json(); alert(d.message); syncLotteryArena();
         }
-        function openDepositBox() { document.getElementById('payGatewayModal').classList.add('active'); startTimer(300); }
+                function openDepositBox() { document.getElementById('payGatewayModal').classList.add('active'); startTimer(300); }
         function closeDepositBox() { document.getElementById('payGatewayModal').classList.remove('active'); clearInterval(timerInterval); }
         
         function startTimer(duration) {
@@ -403,33 +403,37 @@
         
         async function syncLotteryArena() {
             if(!activeUser) return; const res = await fetch('/api/lottery/status'); const d = await res.json(); 
-            document.getElementById('stdLotteryStatus').innerText = `Pool: ${d.stdCount} Tickets | Status: ${d.standard.status}`; document.getElementById('highLotteryStatus').innerText = `Total Tickets Bought: ${d.highCount}`;
-            const uRes = await fetch('/api/users'); const uData = await uRes.json(); let me = uData.find(u => u.username === activeUser); if(me) document.getElementById('topWalletBalance').innerText = `₹${me.balance.toFixed(2)}`;
-            if(d.highWinners.length > 0) { document.getElementById('highWinnersBox').innerHTML = d.highWinners.map(w => `<div>🏆 @${w.username} won ${w.prize}</div>`).join(''); }
+            document.getElementById('stdLotteryStatus').innerText = "Pool: " + d.stdCount + " Tickets | Status: " + d.standard.status;
+            document.getElementById('highLotteryStatus').innerText = "Total Tickets Bought: " + d.highCount;
+            const uRes = await fetch('/api/users'); const uData = await uRes.json(); let me = uData.find(u => u.username === activeUser); if(me) document.getElementById('topWalletBalance').innerText = "₹" + me.balance.toFixed(2);
+            if(d.highWinners.length > 0) { document.getElementById('highWinnersBox').innerHTML = d.highWinners.map(w => "<div>🏆 @" + w.username + " won " + w.prize + "</div>").join(''); }
             
             const oRes = await fetch('/api/admin/gmail-orders'); const oData = await oRes.json();
             let myOrders = oData.filter(o => o.username === activeUser);
             let dBox = document.getElementById('gmailDeliveryBoxContainer');
-            if(myOrders.length === 0) { dBox.innerHTML = `// Delivery Vault Locked.<br>Aapke orders ka fresh data yahan live drop hoga.`; }
-            else { dBox.innerHTML = myOrders.map(o => `<div style="border-bottom:1px solid #1f2937; padding:4px 0;"><span style="color:#ef4444;">[${o.mode}]</span> ID: ${o.id} - Status: <b style="color:#facc15;">${o.status}</b><br><span style="color:#94a3b8;">${o.details}</span></div>`).join(''); }
+            if(myOrders.length === 0) { dBox.innerHTML = "// Delivery Vault Locked.<br>Aapke orders ka fresh data yahan live drop hoga."; }
+            else { dBox.innerHTML = myOrders.map(o => "<div style='border-bottom:1px solid #1f2937; padding:4px 0;'><span style='color:#ef4444;'>[" + o.mode + "]</span> ID: " + o.id + " - Status: <b style='color:#facc15;'>" + o.status + "</b><br><span style='color:#94a3b8;'>" + o.details + "</span></div>").join(''); }
 
             const tRes = await fetch('/api/tickets/all'); const tData = await tRes.json(); let myTickets = tData.filter(t => t.username === activeUser); let container = document.getElementById('ticketLogsContainer'); 
             let targetStatus = currentView === 'process' ? 'Process Query' : 'My All Doubts'; let displayTkts = myTickets.filter(t => t.status === targetStatus);
-            if(displayTkts.length === 0) { container.innerHTML = `<p style="font-size:11px; color:#94a3b8; font-style:italic;">No tickets here.</p>`; return; }
+            if(displayTkts.length === 0) { container.innerHTML = "<p style='font-size:11px; color:#94a3b8; font-style:italic;'>No tickets here.</p>"; return; }
             
-            container.innerHTML = displayTkts.map((t, idx) => `
-                <div class="panel" style="padding:15px; margin-bottom:0; font-size:12px; border:1px solid #1f2937;">
-                    <b style="color:#ef4444;">[${t.category}] ID: ${t.id}</b>
-                    <p style="color:#fff; margin-top:6px; background:#111827; padding:6px; border-radius:4px;"><b>Me:</b> ${t.description}</p>
-                    <p style="color:#38bdf8; margin-top:6px; background:#1e1b4b; padding:6px; border-radius:4px;"><b>Supporter:</b> ${t.reply}</p>
-                    \${t.status === 'Process Query' ? \`
-                        <div style="display:flex; gap:8px; margin-top:10px;">
-                            <input type="text" id="usrRepInp_\${idx}" placeholder="Type message to supporter..." class="form-input" style="margin:0; padding:6px; font-size:11px;">
-                            <button onclick="sendUserSupportReply('\${t.id}', 'usrRepInp_\${idx}')" style="background:#3b82f6; border:none; padding:0 12px; border-radius:6px; color:white; font-weight:bold; font-size:11px; cursor:pointer;">Reply</button>
-                        </div>
-                    \` : ''}
-                </div>
-            `).join('');
+            let htmlStr = "";
+            for(let i=0; i<displayTkts.length; i++) {
+                let t = displayTkts[i];
+                htmlStr += "<div class='panel' style='padding:15px; margin-bottom:0; font-size:12px; border:1px solid #1f2937;'>";
+                htmlStr += "<b style='color:#ef4444;'>[" + t.category + "] ID: " + t.id + "</b>";
+                htmlStr += "<p style='color:#fff; margin-top:6px; background:#111827; padding:6px; border-radius:4px;'><b>Me:</b> " + t.description + "</p>";
+                htmlStr += "<p style='color:#38bdf8; margin-top:6px; background:#1e1b4b; padding:6px; border-radius:4px;'><b>Supporter:</b> " + t.reply + "</p>";
+                if(t.status === 'Process Query') {
+                    htmlStr += "<div style='display:flex; gap:8px; margin-top:10px;'>";
+                    htmlStr += "<input type='text' id='usrRepInp_" + i + "' placeholder='Type message to supporter...' class='form-input' style='margin:0; padding:6px; font-size:11px;'>";
+                    htmlStr += "<button onclick=\"sendUserSupportReply('" + t.id + "', 'usrRepInp_" + i + "')\" style='background:#3b82f6; border:none; padding:0 12px; border-radius:6px; color:white; font-weight:bold; font-size:11px; cursor:pointer;'>Reply</button>";
+                    htmlStr += "</div>";
+                }
+                htmlStr += "</div>";
+            }
+            container.innerHTML = htmlStr;
         }
         function downloadGmailAccountsTxtFile() { alert("No completed bulk lists available for instant download yet."); }
     </script>

@@ -356,10 +356,9 @@
                 if(!text) return alert("Pehle bulk usernames list dalein!");
                 payload.bulkUsernamesList = text.split('\n').map(u => u.trim()).filter(u => u.length > 0);
             }
-            const res = await fetch('/api/user/order-gmail', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ ...payload }) });
+            const res = await fetch('/api/user/order-gmail', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
             let d = await res.json(); alert(d.message); syncLotteryArena();
         }
-        
         function openDepositBox() { document.getElementById('payGatewayModal').classList.add('active'); startTimer(300); }
         function closeDepositBox() { document.getElementById('payGatewayModal').classList.remove('active'); clearInterval(timerInterval); }
         
@@ -413,4 +412,26 @@
             let dBox = document.getElementById('gmailDeliveryBoxContainer');
             if(myOrders.length === 0) { dBox.innerHTML = `// Delivery Vault Locked.<br>Aapke orders ka fresh data yahan live drop hoga.`; }
             else { dBox.innerHTML = myOrders.map(o => `<div style="border-bottom:1px solid #1f2937; padding:4px 0;"><span style="color:#ef4444;">[${o.mode}]</span> ID: ${o.id} - Status: <b style="color:#facc15;">${o.status}</b><br><span style="color:#94a3b8;">${o.details}</span></div>`).join(''); }
-const tRes = await fetch('/api/tickets/all'); const tData = await tRes.json(); let myTickets = tData.filter(t => t.username === activeUser); let container = document.getElementById('ticketLogsContainer');let targetStatus = currentView === 'process' ? 'Process Query' : 'My All Doubts'; let displayTkts = myTickets.filter(t => t.status === targetStatus);if(displayTkts.length === 0) { container.innerHTML = <p style="font-size:11px; color:#94a3b8; font-style:italic;">No tickets here.</p>; return; }container.innerHTML = displayTkts.map((t, idx) =>  <div class="panel" style="padding:15px; margin-bottom:0; font-size:12px; border:1px solid #1f2937;"> <b style="color:#ef4444;">[${t.category}] ID: ${t.id}</b> <p style="color:#fff; margin-top:6px; background:#111827; padding:6px; border-radius:4px;"><b>Me:</b> ${t.description}</p> <p style="color:#38bdf8; margin-top:6px; background:#1e1b4b; padding:6px; border-radius:4px;"><b>Supporter:</b> ${t.reply}</p> \${t.status === 'Process Query' ? \Reply` : ''}`).join('');}function downloadGmailAccountsTxtFile() { alert("No completed bulk lists available for instant download yet."); }
+
+            const tRes = await fetch('/api/tickets/all'); const tData = await tRes.json(); let myTickets = tData.filter(t => t.username === activeUser); let container = document.getElementById('ticketLogsContainer'); 
+            let targetStatus = currentView === 'process' ? 'Process Query' : 'My All Doubts'; let displayTkts = myTickets.filter(t => t.status === targetStatus);
+            if(displayTkts.length === 0) { container.innerHTML = `<p style="font-size:11px; color:#94a3b8; font-style:italic;">No tickets here.</p>`; return; }
+            
+            container.innerHTML = displayTkts.map((t, idx) => `
+                <div class="panel" style="padding:15px; margin-bottom:0; font-size:12px; border:1px solid #1f2937;">
+                    <b style="color:#ef4444;">[${t.category}] ID: ${t.id}</b>
+                    <p style="color:#fff; margin-top:6px; background:#111827; padding:6px; border-radius:4px;"><b>Me:</b> ${t.description}</p>
+                    <p style="color:#38bdf8; margin-top:6px; background:#1e1b4b; padding:6px; border-radius:4px;"><b>Supporter:</b> ${t.reply}</p>
+                    \${t.status === 'Process Query' ? \`
+                        <div style="display:flex; gap:8px; margin-top:10px;">
+                            <input type="text" id="usrRepInp_\${idx}" placeholder="Type message to supporter..." class="form-input" style="margin:0; padding:6px; font-size:11px;">
+                            <button onclick="sendUserSupportReply('\${t.id}', 'usrRepInp_\${idx}')" style="background:#3b82f6; border:none; padding:0 12px; border-radius:6px; color:white; font-weight:bold; font-size:11px; cursor:pointer;">Reply</button>
+                        </div>
+                    \` : ''}
+                </div>
+            `).join('');
+        }
+        function downloadGmailAccountsTxtFile() { alert("No completed bulk lists available for instant download yet."); }
+    </script>
+</body>
+</html>
